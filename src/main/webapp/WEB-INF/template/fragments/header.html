@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head></head>
+    <body>
+        <div class="topnavbar" th:fragment="anonymous">
+            <div class="container">
+                <div class="logo">
+                    <div th:include="fragments/login :: login"></div>
+                </div>
+            </div>
+        </div>
+        <div class="topnavbar" th:fragment="authenticated">
+            <div class="container">
+                <div class="logo">
+                    <div th:include="fragments/logout :: logout" class="logged"></div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

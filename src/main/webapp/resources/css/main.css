@@ -1,0 +1,41 @@
+html, body, .clearing {
+    padding: 0;
+    margin: 0;
+}
+ul, ol {
+    list-style: none;
+}
+.logo {
+    background: #fed8d5 url(../images/orchid-temp.jpeg) no-repeat left top;
+    padding-left: 102px;
+    height: 102px;
+}
+
+form.login, .logged {
+    width: 400px;
+    float: right;
+}
+
+form.login label {
+    width: 350px;
+}
+
+form.login label > input[type=text], form.login label > input[type=password] {
+    width: 200px;
+}
+
+input[type=submit] {
+    border-radius: 3px;
+    color: #555;
+    display: block;
+    font-weight: bold;
+    padding: 2px;
+    text-align: center;
+    text-decoration: none;
+    text-shadow: 1px 1px rgba(255, 255, 255, 0.4), -1px -1px rgba(0, 0, 0, 0.075);
+}
+
+.side-bar {
+    float: left;
+    width: 200px;
+}

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layout/club">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+<div layout:fragment="content">
+    <table>
+        <thead>
+        <tr>
+            <th class="first-name name" th:text="user.email"></th>
+            <th class="first-name name" th:text="user.first.name"></th>
+            <th class="last-name name" th:text="user.last.name"></th>
+            <th class="checkboxes" th:text="user.settings"></th>
+            <th class="checkboxes" th:text="user.roles"></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="user : ${users}"></tr>
+            <!--/*@thymesVar id="user" type="club.orchid.domain.auth.User"*/-->
+            <td th:text="${user.email}">email</td>
+            <td th:text="${user.firstName}">first name</td>
+            <td th:text="${user.lastName}">last name</td>
+            <td><dl>
+                <dt th:text="user.accountNonExpired"></dt>
+                <dd><input type="checkbox" disabled="disabled" th:checked="${user.accountNonExpired}" /></dd>
+                <dt th:text="user.accountNonLocked"></dt>
+                <dd><input type="checkbox" disabled="disabled" th:checked="${user.accountNonLocked}" /></dd>
+                <dt th:text="user.credentialsNonExpired"></dt>
+                <dd><input type="checkbox" disabled="disabled" th:checked="${user.credentialsNonExpired}" /></dd>
+                <dt th:text="user.enabled"></dt>
+                <dd><input type="checkbox" disabled="disabled" th:checked="${user.enabled}" /></dd>
+            </dl></td>
+            <td th:text="${user.roles}">roles</td>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
