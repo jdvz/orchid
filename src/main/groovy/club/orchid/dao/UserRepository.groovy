@@ -10,6 +10,7 @@ import club.orchid.domain.auth.User
  */
 interface UserRepository extends PersistentRepository<User> {
     Optional<User> get(long id)
+    Optional<User> get(Map<String, Object> params)
     Collection<User> list()
     long save(User user)
     Collection<Role> getUserRoles(long l)

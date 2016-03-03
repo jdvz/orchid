@@ -50,7 +50,7 @@ class UserService implements IUserService {
     @Override
     UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         if (username) {
-            Optional<User> user = userRepository.get([email: username, enabled: true], User.class)
+            Optional<User> user = userRepository.get([email: username, enabled: true])
             if (user.isPresent()) {
                 user.get().setAuthorities(userRepository.getUserRoles(user.get().id))
             }

@@ -9,8 +9,13 @@ import groovy.transform.Canonical
  */
 @Canonical
 class PageCommand {
+    String name
     String prettyUrl
     String template
     String type
     String content
+    long contentPageId
+
+    List<String> templates
+    List<String> types
 }

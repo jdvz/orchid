@@ -2,11 +2,17 @@ package club.orchid.dao
 
 import club.orchid.dao.mapper.PageMapper
 import club.orchid.dao.mapper.RowPageMapper
+import club.orchid.domain.cms.CmsPage
+import club.orchid.domain.cms.CmsPageContent
 import club.orchid.domain.cms.ContentPage
 import club.orchid.domain.cms.MultiCmsPage
 import club.orchid.domain.cms.Page
+import club.orchid.web.forms.PageCommand
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.dao.EmptyResultDataAccessException
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource
+import org.springframework.jdbc.support.GeneratedKeyHolder
+import org.springframework.jdbc.support.KeyHolder
 import org.springframework.stereotype.Repository
 /**
  * Created with IntelliJ IDEA.
@@ -140,5 +146,86 @@ WHERE entry.enabled = :enabled AND cms_page.content_page_id = :content_page_id""
     '''SELECT content.content
     FROM cms_page_content content
     WHERE content.page_id = :id ORDER BY content.content_order''', [id: pageId], String.class)
+    }
+
+    @Override
+    CmsPage create(final PageCommand pageCommand) {
+        final KeyHolder keyHolder = new GeneratedKeyHolder()
+
+        jdbcTemplate.update('''INSERT INTO cms_entries(name, pretty_url, discriminator, enabled) VALUES (:name, :pretty_url, :discriminator, :enabled)''',
+                new MapSqlParameterSource([name: pageCommand.name, pretty_url: pageCommand.prettyUrl, discriminator: 'CmsPage', enabled: true]), keyHolder)
+        long id = keyHolder.key?.longValue()
+        jdbcTemplate.update('''INSERT INTO pages(id, template) VALUES (:id, :template)''',
+                new MapSqlParameterSource([id: id, template: pageCommand.template]))
+        jdbcTemplate.update('''INSERT INTO cms_pages(id, content_page_id) VALUES (:id, :content_page_id)''',
+                new MapSqlParameterSource([id: id, content_page_id: pageCommand.contentPageId]))
+
+        return new CmsPage(id:id, name: pageCommand.name,
+                prettyUrl: pageCommand.prettyUrl, discriminator: 'CmsPage',
+                enabled: true, template: pageCommand.template,
+                contentPage: new ContentPage(id: pageCommand.contentPageId))
+    }
+
+    @Override
+    CmsPage update(final CmsPage cmsPage, final PageCommand pageCommand) {
+        if (cmsPage.prettyUrl != pageCommand.prettyUrl || cmsPage.name != pageCommand.name) {
+            jdbcTemplate.update('''UPDATE cms_entries SET name = :name, pretty_url = :pretty_url WHERE id = :id''',
+                    new MapSqlParameterSource([name: cmsPage.name, pretty_url: cmsPage.prettyUrl, id: cmsPage.id]))
+        }
+        if (cmsPage.template != pageCommand.template) {
+            jdbcTemplate.update('''UPDATE pages SET template = :template WHERE id = :id''',
+                    new MapSqlParameterSource([id: cmsPage.id, template: pageCommand.template]))
+        }
+        if (cmsPage.contentPage?.id != pageCommand.contentPageId) {
+            jdbcTemplate.update('''UPDATE cms_pages SET content_page_id = :content_page_id WHERE id = :id''',
+                    new MapSqlParameterSource([id: cmsPage.id, content_page_id: cmsPage.contentPage?.id]))
+        }
+        return cmsPage // update
+    }
+
+    @Override
+    CmsPage create(List<CmsPageContent> cmsPageContent, CmsPage page) {
+        cmsPageContent.each { CmsPageContent content ->
+            createCmsPageContent(page, content)
+        }
+        return this.page(page.prettyUrl).get()
+    }
+
+    @Override
+    CmsPage update(List<CmsPageContent> cmsPageContent, final CmsPage cmsPage) {
+        LinkedList<CmsPageContent> currentContents = jdbcTemplate.queryForList('''SELECT cc.id FROM cms_page_content cc
+WHERE cc.page_id = :id ORDER BY cc.content_order''', [id: cmsPage.id], Long.class)
+        if (!currentContents) {
+            return create(cmsPageContent, cmsPage)
+        } else {
+            def newContentLength = cmsPageContent.size()
+            def oldContentLenght = currentContents.size()
+            int index = Math.max(newContentLength, oldContentLenght)
+            for (int i = 0; i < index; i++) {
+                if (i >= newContentLength) {
+                    deleteCmsPageContent(currentContents.get(i))
+                } else if (i >= oldContentLenght) {
+                    createCmsPageContent(cmsPage, i, cmsPageContent.get(i))
+                } else {
+                    updateCmsPageContent(currentContents.get(i), cmsPageContent.get(i))
+                }
+            }
+        }
+        return this.page(cmsPage.prettyUrl).get()
+    }
+
+    private int createCmsPageContent(CmsPage cmsPage, int i, CmsPageContent content) {
+        jdbcTemplate.update('''INSERT INTO cms_page_content(page_id, content_order, content) VALUES (:page_id, :content_order, :content)''',
+                [page_id: cmsPage.id, content_order: i, content: content.content])
+    }
+
+    private int deleteCmsPageContent(CmsPageContent content) {
+        jdbcTemplate.update('''DELETE FROM cms_page_content WHERE id = :id''',
+                [id: content.id])
+    }
+
+    private int updateCmsPageContent(CmsPageContent current, CmsPageContent updated) {
+        jdbcTemplate.update('''UPDATE cms_page_content SET content = :content WHERE id = :id''',
+                [id: current.id, content: updated.content])
     }
 }

@@ -1,6 +1,7 @@
 package club.orchid.controller
 
 import club.orchid.domain.cms.CmsPage
+import club.orchid.domain.cms.ContentPage
 import club.orchid.domain.cms.Page
 import club.orchid.service.IPageService
 import club.orchid.service.MainApplicationContext
@@ -71,9 +72,16 @@ class PageController extends AbstractController {
         Optional<CmsPage> optional = pageService.<CmsPage> page(prettyUrl)
         if (optional.isPresent()) {
             CmsPage page = optional.get()
-            model.addAttribute('templateName', "layout/${page.template}")
-            model.addAttribute('pageCommand', new PageCommand(prettyUrl: prettyUrl, content: page.content))
-            return "pages/edit"
+            model.addAttribute('pageCommand', new PageCommand(
+                    prettyUrl: prettyUrl,
+                    content: page.content,
+                    type: page.discriminator,
+                    template: page.template,
+                    contentPageId: page.contentPage?.id,
+                    types: ['CmsPage'],
+                    templates: ['edit', 'empty', 'home', 'main', 'page']
+            ))
+            return "edit"
         } else {
             redirectAttributes.addFlashAttribute('message', 'Can\'t edit page')
             return "redirect:/pages/${prettyUrl}.html"
@@ -86,10 +94,7 @@ class PageController extends AbstractController {
                        final PageCommand pageCommand,
                        final Model model, final Principal principal, final RedirectAttributes redirectAttributes) {
         CmsPage page = pageService.<CmsPage> page(prettyUrl).orElse(new CmsPage(discriminator: 'CmsPage'))
-        page.setContent(pageCommand.content)
-        page.setDiscriminator('CmsPage')
-        page.setTemplate(pageCommand.template)
-        pageService.save(page)
+        pageService.save(page, pageCommand)
         return "redirect:/pages/${prettyUrl}.html"
     }
 }

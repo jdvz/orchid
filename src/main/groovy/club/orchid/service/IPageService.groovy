@@ -3,6 +3,7 @@ package club.orchid.service
 import club.orchid.domain.cms.CmsPage
 import club.orchid.domain.cms.MultiCmsPage
 import club.orchid.domain.cms.Page
+import club.orchid.web.forms.PageCommand
 
 /**
  * Created with IntelliJ IDEA.
@@ -17,5 +18,5 @@ interface IPageService {
     public <T extends Page<T>> Optional<T> page(String prettyUrl)
     Optional<MultiCmsPage> page(String prettyUrl, final int page)
     String pageContent(long pageId)
-    Page save(CmsPage cmsPage)
+    Page save(CmsPage cmsPage, PageCommand pageCommand)
 }

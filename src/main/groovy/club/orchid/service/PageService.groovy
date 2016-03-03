@@ -2,9 +2,10 @@ package club.orchid.service
 
 import club.orchid.dao.PageRepository
 import club.orchid.domain.cms.CmsPage
+import club.orchid.domain.cms.CmsPageContent
 import club.orchid.domain.cms.MultiCmsPage
 import club.orchid.domain.cms.Page
-import club.orchid.util.AuthenticationUtils
+import club.orchid.web.forms.PageCommand
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -57,13 +58,15 @@ class PageService implements IPageService {
 
     @Transactional
     @Override
-    Page save(CmsPage cmsPage) {
+    Page save(final CmsPage cmsPage, final PageCommand pageCommand) {
         if (cmsPage.isPersistent()) {
-
+            pageRepository.update(cmsPage, pageCommand)
+            pageRepository.update(new CmsPageContent(content: pageCommand.content, pageId: cmsPage.id))
+            return cmsPage
         } else {
-            pageRepository.create(cmsPage)
-            pageRepository.save()
+            final CmsPage page = pageRepository.create(pageCommand)
+            pageRepository.create(new CmsPageContent(content: pageCommand.content, pageId: page.id))
+            return page
         }
-        return null
     }
 }
