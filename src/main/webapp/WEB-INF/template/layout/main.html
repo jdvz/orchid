@@ -10,11 +10,10 @@
           href="../../resources/css/main.css" th:href="@{/resources/css/main.css}" />
 </head>
 <body>
-<div th:replace="fragments/header :: (${user.anonymous}? 'anonymous' : 'authenticated')" th:with="user=${user}">
+<div th:replace="fragments/header :: (${user.anonymous}? 'anonymous' : 'authenticated')">
     ...
 </div>
 <div class="container">
-    <!--<div th:replace="fragments/pages" class="side-bar">SIDE BAR</div>-->
     <div th:replace="fragments/pages :: pages" class="side-bar">SIDE BAR</div>
     <div class="page-container"><div layout:fragment="content">MAIN CONTENT</div></div>
     <div th:replace="fragments/footer :: footer">&copy; 2014 The Static Templates</div>

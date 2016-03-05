@@ -18,7 +18,7 @@
             <label><th:block th:text="edit.template" /><select th:field="*{template}">
                 <option th:each="template : ${pageCommand.templates}" th:value="${template}" th:text="${template}">template</option>
             </select></label>
-            <label><th:block th:text="edit.content" /><select th:field="*{contentPageId}">
+            <label><th:block th:text="edit.content" /><select th:field="*{mainPageId}">
                 <option th:each="page : ${pageCommand.contentPages}" th:value="${page.id}" th:text="${page.name}">content page</option>
             </select></label>
             <label><th:block th:text="edit.type" /><select id="type" th:field="*{type}">
@@ -26,7 +26,7 @@
             </select></label>
             <div class="clearer"></div>
         </div>
-        <label id="editor" class="textarea hidden"><th:block th:text="edit.content" /><textarea id="editor1" name="content" th:text="${pageCommand.content}">content</textarea></label>
+        <label id="editor" class="textarea"><th:block th:text="edit.content" /><textarea id="editor1" name="content" th:text="${pageCommand.content}">content</textarea></label>
     </form>
 </div>
 </body>

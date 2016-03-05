@@ -2,9 +2,6 @@ package club.orchid.util
 
 import club.orchid.domain.auth.User
 import club.orchid.domain.cms.CmsPage
-import club.orchid.domain.cms.MultiCmsPage
-import club.orchid.domain.cms.Page
-
 /**
  * Created with IntelliJ IDEA.
  * @author: zera
@@ -23,7 +20,7 @@ class AuthenticationUtils {
             roles: 'ROLE_ANONYMOUS'
     )
 
-    public static final CmsPage page404 = new MultiCmsPage(content: '404', template: 'system', pageName: '404')
+    public static final CmsPage page404 = new CmsPage(content: '404', template: 'system', pageName: '404')
 
     private AuthenticationUtils() {
     }

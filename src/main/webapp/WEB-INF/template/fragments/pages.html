@@ -5,7 +5,12 @@
 </head>
 <body>
 <div th:fragment="pages" class="side-bar" id="sidebar">
-    <ul><li th:each="page : ${pages}"><a th:text="${page.name}" th:href="@{/page/{url}.html(url=${page.prettyUrl})}" href="page.html">page name</a></li></ul>
+    <ul><li
+            th:each="chapter : ${pages}"
+            th:class="${chapter != null and page != null and (chapter.id == page.id)}? 'current'"><a
+                th:text="${chapter.name}"
+                th:href="@{/page/{url}.html(url=${chapter.prettyUrl})}"
+                href="page.html">page name</a></li></ul>
 </div>
 </body>
 </html>

@@ -1,8 +1,7 @@
 package club.orchid.web.forms
 
-import club.orchid.domain.cms.ContentPage
+import club.orchid.domain.cms.CmsPage
 import groovy.transform.Canonical
-
 /**
  * Created with IntelliJ IDEA.
  * @author: zera
@@ -16,9 +15,9 @@ class PageCommand {
     String template
     String type
     String content
-    long contentPageId
+    long mainPageId
 
     List<String> templates
     List<String> types
-    List<ContentPage> contentPages
+    List<CmsPage> contentPages
 }

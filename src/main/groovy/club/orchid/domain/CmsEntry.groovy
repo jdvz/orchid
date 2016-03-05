@@ -21,6 +21,5 @@ abstract class CmsEntry <T extends CmsEntry<T>> extends AbstractMappedPersistent
     @Primitive
     String tagline
 
-    long currentCatalogId
     abstract String getContent()
 }

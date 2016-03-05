@@ -18,6 +18,7 @@ abstract class Page<T extends Page> extends CmsEntry<T> {
     @ManyToOne("main_page_id")
     Page mainPage
 
+    String content
     String pageName
-    List<? extends Page> pages
+    List<Page> pages
 }

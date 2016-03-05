@@ -2,16 +2,13 @@ package club.orchid.util
 
 import club.orchid.domain.auth.User
 import club.orchid.domain.cms.CmsPage
-import club.orchid.domain.cms.MultiCmsPage
 import club.orchid.domain.cms.Page
-import org.junit.Assert
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
 
 import static org.junit.Assert.*
-
 /**
  * Created with IntelliJ IDEA.
  *
@@ -57,6 +54,5 @@ public class QueryUtilsTest {
         println CmsPage.class.isAssignableFrom(Page.class)
         println Page.class.isAssignableFrom(CmsPage.class)
         println CmsPage.class.isAssignableFrom(CmsPage.class)
-        println CmsPage.class.isAssignableFrom(MultiCmsPage.class)
     }
 }

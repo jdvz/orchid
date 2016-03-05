@@ -3,18 +3,14 @@ package club.orchid.service
 import club.orchid.Constants
 import club.orchid.dao.PageRepository
 import club.orchid.domain.cms.CmsPage
-import club.orchid.domain.cms.ContentPage
-import club.orchid.domain.cms.MultiCmsPage
 import club.orchid.domain.cms.Page
 import club.orchid.strategy.PageContentStrategy
 import club.orchid.web.forms.PageCommand
 import org.apache.log4j.Logger
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.stereotype.Service
-import org.springframework.transaction.annotation.Transactional
-
-import java.util.function.Supplier
-
+import org.springframework.util.StringUtils
 /**
  * Created with IntelliJ IDEA.
  * @author: zera
@@ -29,39 +25,27 @@ class PageService implements IPageService {
     private IResourceService resourceService
     @Autowired
     private MainApplicationContext context
+    @Autowired
+    @Qualifier('cmsPageContentStrategy')
+    private PageContentStrategy<CmsPage> strategy
 
     @Override
-    List<ContentPage> contentpages() {
-        return pageRepository.contentpages()
-    }
-
-    @Override
-    List<Page> pages() {
+    List<CmsPage> pages() {
         return pageRepository.pages()
     }
 
     @Override
-    List<Page> subpages(long mainPageId) {
-        return pageRepository.subpages(mainPageId)
+    List<CmsPage> pages(long mainPageId) {
+        return pageRepository.pages(mainPageId)
     }
 
     @Override
-    List<Page> chapters(long contentPageId) {
-        return pageRepository.chapters(contentPageId)
-    }
-
-    @Override
-    public <T extends Page<T>> Optional<T> page(String prettyUrl) {
+    Optional<CmsPage> page(String prettyUrl) {
         return pageRepository.page(prettyUrl)
     }
 
     @Override
-    Optional <MultiCmsPage> page(String prettyUrl, int page) {
-        return pageRepository.page(prettyUrl, page)
-    }
-
-    @Override
-    def <T extends Page<T>> Optional<T> page(long pageId) {
+    def Optional<CmsPage> page(long pageId) {
         return pageRepository.page(pageId)
     }
 
@@ -72,47 +56,25 @@ class PageService implements IPageService {
     }
 
     @Override
-    public <T extends Page<T>> T save(PageCommand pageCommand) {
-        PageContentStrategy<T> strategy = context.getPageContentStrategy(pageCommand.type)
-        T page = pageCommand.pageId ? pageRepository.page(pageCommand.pageId).orElseThrow({
-            return new IllegalArgumentException("Page not found")
-        }) : strategy.createPage()
-        return strategy.savePage(page, pageCommand)
-    }
-
-    @Transactional
-    public CmsPage savePage(final CmsPage cmsPage, final PageCommand pageCommand) {
-        try {
-            if (cmsPage.isPersistent()) {
-                pageRepository.update(cmsPage, pageCommand)
-                if (cmsPage.prettyUrl != pageCommand.prettyUrl) {
-                    resourceService.deleteCmsPageContent(cmsPage.prettyUrl)
-                }
-                resourceService.create(pageCommand)
-                return cmsPage
-            } else {
-                final CmsPage page = pageRepository.create(cmsPage, pageCommand)
-                resourceService.create(pageCommand)
-                return page
+    CmsPage save(PageCommand pageCommand) {
+        boolean createNew = pageCommand.pageId == 0
+        if (createNew) {
+            final CmsPage newpage = pageRepository.create(pageCommand)
+            resourceService.create(pageCommand)
+            return newpage
+        } else {
+            CmsPage page = pageRepository.page(pageCommand.pageId).orElseThrow({
+                return new IllegalArgumentException("Page not found")
+            })
+            pageRepository.update(page, pageCommand)
+            if (page.prettyUrl != pageCommand.prettyUrl || StringUtils.isEmpty(pageCommand.content)) {
+                resourceService.deleteCmsPageContent(page.prettyUrl)
             }
-        } catch (IOException e)  {
-            log.error("Can't save file $pageCommand.prettyUrl with error $e.message", e)
-        }
-        null
-    }
-
-    @Transactional
-    public ContentPage savePage(final ContentPage contentPage, final PageCommand pageCommand) {
-        try {
-            if (contentPage.isPersistent()) {
-                return pageRepository.update(contentPage, pageCommand)
-            } else {
-                return pageRepository.create(contentPage, pageCommand)
+            if (pageCommand.content) {
+                resourceService.create(pageCommand)
             }
-        } catch (IOException e)  {
-            log.error("Can't save file $pageCommand.prettyUrl with error $e.message", e)
+            return page
         }
-        null
     }
 
     @Override
@@ -122,6 +84,11 @@ class PageService implements IPageService {
 
     @Override
     List<String> allowedTypes() {
-        return [Constants.CmsTypes.CMS_TYPE, Constants.CmsTypes.CONTENT_TYPE]
+        return [Constants.CmsTypes.CMS_TYPE]
+    }
+
+    @Override
+    List<CmsPage> allowedPages() {
+        return [new CmsPage(id:0, name:'root')] + this.pages()
     }
 }

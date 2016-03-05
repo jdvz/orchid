@@ -11,7 +11,4 @@ import groovy.transform.Canonical
  */
 @Canonical
 class CmsPage extends Page<CmsPage> {
-    String content
-    @ManyToOne('content_page_id')
-    ContentPage contentPage
 }

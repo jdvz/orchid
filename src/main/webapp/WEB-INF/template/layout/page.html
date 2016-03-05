@@ -5,12 +5,12 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
     <!--/*  Each token will be replaced by their respective titles in the resulting page. */-->
-    <title th:text="${page.name}">Task List</title>
+    <title th:text="${page.name}" th:assert="${page != null}">Task List</title>
     <link rel="stylesheet" type="text/css" media="all"
           href="../../../resources/css/main.css" th:href="@{/resources/css/main.css}" />
 </head>
 <body>
-<div th:replace="fragments/header :: (${user.anonymous}? 'anonymous' : 'authenticated')" th:with="user=${user}">
+<div th:replace="fragments/header :: (${user.anonymous}? 'anonymous' : 'authenticated')">
     ...
 </div>
 <div class="container page-container">

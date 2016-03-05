@@ -26,7 +26,7 @@ class MainController extends AbstractController {
     @RequestMapping(value = ['/','/index.html'], method = RequestMethod.GET)
     public String main(final Model model, final Principal principal) {
         model.addAttribute('title', 'start')
-        model.addAttribute('pages', pageService.contentpages())
+        model.addAttribute('pages', pageService.pages())
         model.addAttribute('user', userService.loadUserByUsername(principal?.name))
         return 'index'
     }

@@ -1,30 +1,22 @@
 package club.orchid.config
 
-import groovy.text.TemplateEngine
 import nz.net.ultraq.thymeleaf.LayoutDialect
-import org.slf4j.LoggerFactory
 import org.slf4j.Logger
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.autoconfigure.AutoConfigureAfter
+import org.slf4j.LoggerFactory
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass
-import org.springframework.boot.autoconfigure.thymeleaf.ThymeleafProperties
-import org.springframework.boot.autoconfigure.web.WebMvcAutoConfiguration
-import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.support.ResourceBundleMessageSource
-import org.springframework.web.servlet.ViewResolver
 import org.springframework.web.servlet.config.annotation.EnableWebMvc
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 import org.springframework.web.servlet.i18n.SessionLocaleResolver
-import org.springframework.web.servlet.view.InternalResourceViewResolver
+import org.thymeleaf.dialect.IDialect
 import org.thymeleaf.spring4.SpringTemplateEngine
 import org.thymeleaf.spring4.view.ThymeleafViewResolver
+import org.thymeleaf.extras.springsecurity4.dialect.SpringSecurityDialect
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver
-import org.thymeleaf.templateresolver.TemplateResolver
-
 /**
  * Created with IntelliJ IDEA.
  * @author: zera
@@ -61,6 +53,7 @@ class WebConfigurer extends WebMvcConfigurerAdapter {
         def templateEngine = new SpringTemplateEngine()
         templateEngine.setTemplateResolver(templateResolver())
         templateEngine.addDialect(new LayoutDialect())
+        templateEngine.setAdditionalDialects(Collections.singleton(new SpringSecurityDialect()))
         return templateEngine
     }
 

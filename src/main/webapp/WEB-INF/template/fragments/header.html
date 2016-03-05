@@ -5,6 +5,8 @@
         <div class="topnavbar" th:fragment="anonymous">
             <div class="container">
                 <div class="logo">
+                    <a id="logo" href="/" th:href="@{/}"><img
+                            src="../../../resources/images/orchid-temp.jpeg" th:src="@{/resources/images/orchid-temp.jpeg}" title="orchid" /></a>
                     <div th:include="fragments/login :: login"></div>
                 </div>
             </div>
@@ -12,6 +14,8 @@
         <div class="topnavbar" th:fragment="authenticated">
             <div class="container">
                 <div class="logo">
+                    <a id="logo" href="/" th:href="@{/}"><img
+                            src="../../../resources/images/orchid-temp.jpeg" th:src="@{/resources/images/orchid-temp.jpeg}" title="orchid" /></a>
                     <div th:include="fragments/logout :: logout" class="logged"></div>
                 </div>
             </div>
