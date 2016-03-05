@@ -1,5 +1,6 @@
 package club.orchid.web.forms
 
+import club.orchid.domain.cms.ContentPage
 import groovy.transform.Canonical
 
 /**
@@ -9,6 +10,7 @@ import groovy.transform.Canonical
  */
 @Canonical
 class PageCommand {
+    long pageId
     String name
     String prettyUrl
     String template
@@ -18,4 +20,5 @@ class PageCommand {
 
     List<String> templates
     List<String> types
+    List<ContentPage> contentPages
 }

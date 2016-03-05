@@ -5,17 +5,19 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
     <!--/*  Each token will be replaced by their respective titles in the resulting page. */-->
-    <title layout:title-pattern="$DECORATOR_TITLE - $CONTENT_TITLE">Task List</title>
+    <title th:text="${page.name}">Task List</title>
     <link rel="stylesheet" type="text/css" media="all"
-          href="../../resources/css/main.css" th:href="@{/resources/css/main.css}" />
+          href="../../../resources/css/main.css" th:href="@{/resources/css/main.css}" />
 </head>
 <body>
 <div th:replace="fragments/header :: (${user.anonymous}? 'anonymous' : 'authenticated')" th:with="user=${user}">
     ...
 </div>
-<div class="container">
-    <div th:replace="fragments/pages" class="side-bar">SIDE BAR</div>
-    <div layout:fragment="content">CONTENT</div>
+<div class="container page-container">
+    <div th:replace="fragments/pages :: pages" class="side-bar">SIDE BAR</div>
+    <div class="page-container">
+        <div layout:fragment="content">CONTENT</div>
+    </div>
     <div th:replace="fragments/footer :: footer">&copy; 2014 The Static Templates</div>
 </div>
 </body>

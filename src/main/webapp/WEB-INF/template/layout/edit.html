@@ -4,19 +4,32 @@
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
-    <!--/*  Each token will be replaced by their respective titles in the resulting page. */-->
-    <title layout:title-pattern="$DECORATOR_TITLE - $CONTENT_TITLE">Task List</title>
+    <title><th:block th:text="edit.page" />[[${page.name}]]</title>
     <link rel="stylesheet" type="text/css" media="all"
           href="../../../resources/css/main.css" th:href="@{/resources/css/main.css}" />
     <link rel="stylesheet" type="text/css" media="all"
-          href="../../../resources/css/moono/editor.css" th:href="@{/resources/css/moono/editor.css}" />
+          href="../../../resources/css/edit.css" th:href="@{/resources/css/edit.css}" />
+    <script type="text/javascript" src="../../../resources/js/main.js" th:src="@{/resources/js/main.js}"></script>
     <script type="text/javascript" src="../../../resources/js/ckeditor.js" th:src="@{/resources/js/ckeditor.js}"></script>
     <script type="text/javascript" src="../../../resources/js/config.js" th:src="@{/resources/js/config.js}"></script>
     <script type="text/javascript">
-        CKEDITOR.replace('editor1');
+        function updateEditor() {
+            var editor = document.getElementById('editor');
+            var type = document.getElementById('type');
+            if (type.value == 'CmsPage') {
+                editor.classList.remove('hidden');
+            } else {
+                editor.classList.add('hidden');
+            }
+        }
+        function loadCkEditor() {
+            CKEDITOR.replace('editor1');
+            updateEditor();
+            type.addEventListener('change', updateEditor);
+        }
     </script>
 </head>
-<body>
+<body onload="loadCkEditor();">
 <div class="container">
     <div layout:fragment="content">
     </div>

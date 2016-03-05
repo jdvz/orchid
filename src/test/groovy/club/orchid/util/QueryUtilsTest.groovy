@@ -41,7 +41,7 @@ public class QueryUtilsTest {
 
     @Test
     public void createEncoder() throws Exception {
-        assertNotNull('Empty password encoder', passwortEncoder)
+        assertNull('Empty password encoder', passwortEncoder)
     }
 
     @Test

@@ -4,6 +4,7 @@ import club.orchid.anno.strategy.PageStrategy
 import club.orchid.domain.cms.ContentPage
 import club.orchid.service.IPageService
 import club.orchid.service.PageService
+import club.orchid.web.forms.PageCommand
 import org.springframework.beans.factory.annotation.Autowire
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
@@ -18,9 +19,6 @@ import java.sql.ResultSet
 @Component
 @PageStrategy(ContentPage.class)
 class ContentPageContentStrategy extends PageContentStrategy<ContentPage> {
-    @Autowired
-    private IPageService pageService
-
     @Override
     void extractContent(ResultSet rs, int rowNum, ContentPage page) {
         page.setPages(pageService.chapters(page.id))
@@ -30,11 +28,16 @@ class ContentPageContentStrategy extends PageContentStrategy<ContentPage> {
 
     @Override
     ContentPage createPage() {
-        return new ContentPage()
+        return new ContentPage(discriminator: ContentPage.class.simpleName)
     }
 
     @Override
     Class<ContentPage> getPageClass() {
         return ContentPage.class
+    }
+
+    @Override
+    ContentPage savePage(ContentPage contentPage, PageCommand pageCommand) {
+        return pageService.savePage(contentPage, pageCommand)
     }
 }

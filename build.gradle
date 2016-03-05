@@ -25,7 +25,7 @@ repositories {
 }
 
 flyway {
-    url='jdbc:mysql://localhost/orchid_db'
+    url='jdbc:mysql://localhost/orchid_db?useUnicode=true&amp;characterEncoding=utf8'
     user='orchid'
     password='orchid'
     driver='com.mysql.jdbc.Driver'

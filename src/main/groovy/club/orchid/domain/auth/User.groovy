@@ -46,6 +46,6 @@ class User extends AbstractMappedPersistent<User> implements UserDetails {
     }
 
     Collection<? extends GrantedAuthority> getAuthorities() {
-        return authorities ?: roles.split(',').collect { new Role(roleName:it) }
+        return authorities ?: roles?.split(',')?.collect { new Role(roleName:it) } ?: Collections.emptyList()
     }
 }

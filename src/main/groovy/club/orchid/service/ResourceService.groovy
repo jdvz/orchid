@@ -1,10 +1,20 @@
 package club.orchid.service
 
 import club.orchid.dao.ResourceDao
+import club.orchid.domain.cms.CmsPage
+import club.orchid.domain.cms.CmsPageContent
 import club.orchid.domain.cms.Image
+import club.orchid.web.forms.PageCommand
+import org.apache.log4j.Logger
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.annotation.Value
+import org.springframework.http.HttpEntity
+import org.springframework.http.HttpHeaders
+import org.springframework.http.MediaType
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import org.springframework.util.FileCopyUtils
+import org.springframework.web.multipart.MultipartFile
 
 /**
  * Created with IntelliJ IDEA.
@@ -13,8 +23,13 @@ import org.springframework.transaction.annotation.Transactional
  */
 @Service
 class ResourceService implements IResourceService {
+    private static final Logger log = Logger.getLogger(ResourceService.class.name)
     @Autowired
     ResourceDao resourceDao
+    @Value('${path.images:/opt/resources/images}')
+    String pathImages
+    @Value('${path.htmls:/opt/resources/html}')
+    String pathHtmls
 
     @Override
     Image getOrCreateImage(final String imageName, final String prettyUrl) {
@@ -28,13 +43,58 @@ class ResourceService implements IResourceService {
     }
 
     @Override
-    @Transactional
-    Image save(Image image) {
-        return resourceDao.save(image)
+    String getCmsFullPageContent(String prettyUrl) {
+        final File file = new File("${pathHtmls}/${prettyUrl}.html")
+        return file.exists() ? file.text : ''
     }
 
     @Override
-    Optional<Image> getImageByUid(String uid) {
-        return resourceDao.getImageByNameOrPrettyUrl(uid)
+    boolean deleteCmsPageContent(String prettyUrl) {
+        final File file = new File("${pathHtmls}/${prettyUrl}.html")
+        if (file.exists()) {
+            file.delete()
+            return true
+        }
+        return false
+    }
+
+    @Override
+    Image getImageFullContentByUid(String uid) {
+        Optional<Image> optImage = resourceDao.getImageByNameOrPrettyUrl(uid)
+        if (optImage.isPresent()) {
+            final Image image = optImage.get()
+            File file = new File("$pathImages/${image.realName}")
+            if (file.exists()) {
+                image.bytes = file.bytes
+                return image
+            }
+        }
+        return null
+    }
+
+    @Override
+    @Transactional
+    Image save(final Image image, final MultipartFile file) {
+        try {
+            BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(new File("$pathImages/$image.realName")))
+            FileCopyUtils.copy(file.getInputStream(), stream)
+            stream.close()
+            image.mime = file.contentType
+            return resourceDao.save(image)
+        } catch (IOException e) {
+            log.error("Can't save file $image.realName with error $e.message", e)
+        }
+        return null
+    }
+
+    @Override
+    void create(PageCommand pageCommand) {
+        try {
+            Writer writer = new FileWriter(new File("$pathHtmls/${pageCommand.prettyUrl}.html"))
+            FileCopyUtils.copy(pageCommand.content, writer)
+            writer.close()
+        } catch (IOException e) {
+            log.error("Can't save file $pageCommand.prettyUrl with error $e.message", e)
+        }
     }
 }

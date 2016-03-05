@@ -3,7 +3,6 @@ package club.orchid.domain.cms
 import club.orchid.anno.mapping.Primitive
 import club.orchid.domain.AbstractMappedPersistent
 import groovy.transform.Canonical
-
 /**
  * Created with IntelliJ IDEA.
  * @author: zera
@@ -12,9 +11,5 @@ import groovy.transform.Canonical
 @Canonical
 class CmsPageContent extends AbstractMappedPersistent<CmsPageContent> {
     @Primitive
-    long pageId
-    @Primitive
-    int contentOrder
-    @Primitive
-    String content
+    String path
 }

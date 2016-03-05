@@ -1,21 +1,26 @@
 package club.orchid.controller
 
 import club.orchid.domain.cms.CmsPage
+import club.orchid.domain.cms.CmsPageContent
 import club.orchid.domain.cms.ContentPage
 import club.orchid.domain.cms.Page
 import club.orchid.service.IPageService
 import club.orchid.service.MainApplicationContext
 import club.orchid.util.AuthenticationUtils
 import club.orchid.web.forms.PageCommand
+import com.sun.beans.editors.StringEditor
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.access.annotation.Secured
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
+import org.springframework.web.bind.WebDataBinder
+import org.springframework.web.bind.annotation.InitBinder
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.servlet.mvc.support.RedirectAttributes
 
+import javax.validation.Valid
 import java.security.Principal
 
 /**
@@ -69,19 +74,22 @@ class PageController extends AbstractController {
     @Secured('ADMIN')
     @RequestMapping(value = '/{prettyUrl}/edit.html', method = RequestMethod.GET)
     public String edit(@PathVariable final String prettyUrl, final Model model, final Principal principal, final RedirectAttributes redirectAttributes) {
-        Optional<CmsPage> optional = pageService.<CmsPage> page(prettyUrl)
+        Optional<Page> optional = pageService.<Page> page(prettyUrl)
         if (optional.isPresent()) {
-            CmsPage page = optional.get()
+            Page page = optional.get()
             model.addAttribute('pageCommand', new PageCommand(
+                    pageId: page.id,
                     prettyUrl: prettyUrl,
                     content: page.content,
+                    name: page.name,
                     type: page.discriminator,
                     template: page.template,
-                    contentPageId: page.contentPage?.id,
-                    types: ['CmsPage'],
-                    templates: ['edit', 'empty', 'home', 'main', 'page']
+                    contentPageId: page.contentPage?.id ?: 0,
+                    types: pageService.allowedTypes(),
+                    templates: pageService.allowedTemplates(),
+                    contentPages: pageService.contentpages()
             ))
-            return "edit"
+            return "pages/edit"
         } else {
             redirectAttributes.addFlashAttribute('message', 'Can\'t edit page')
             return "redirect:/pages/${prettyUrl}.html"
@@ -89,12 +97,33 @@ class PageController extends AbstractController {
     }
 
     @Secured('ADMIN')
+    @RequestMapping(value = '/{prettyUrl}/create.html', method = RequestMethod.GET)
+    public String create(@PathVariable final String prettyUrl, final Model model, final Principal principal, final RedirectAttributes redirectAttributes) {
+        model.addAttribute('pageCommand', new PageCommand(
+                pageId: 0,
+                prettyUrl: prettyUrl,
+                content: '',
+                name: '',
+                type: 'CmsPageContent',
+                template: 'page',
+                contentPageId: 0,
+                types: pageService.allowedTypes(),
+                templates: pageService.allowedTemplates(),
+                contentPages: pageService.contentpages()
+        ))
+        return "pages/edit"
+    }
+
+    @Secured('ADMIN')
     @RequestMapping(value = '/{prettyUrl}/edit.html', method = RequestMethod.POST)
     public String edit(@PathVariable final String prettyUrl,
-                       final PageCommand pageCommand,
+                       @Valid final PageCommand pageCommand,
                        final Model model, final Principal principal, final RedirectAttributes redirectAttributes) {
-        CmsPage page = pageService.<CmsPage> page(prettyUrl).orElse(new CmsPage(discriminator: 'CmsPage'))
-        pageService.save(page, pageCommand)
-        return "redirect:/pages/${prettyUrl}.html"
+        try {
+            pageService.save(pageCommand)
+        } catch (IllegalArgumentException e) {
+            redirectAttributes.addFlashAttribute('message', "Can\'t save ${prettyUrl}")
+        }
+        return "redirect:/page/${pageCommand.prettyUrl}.html"
     }
 }

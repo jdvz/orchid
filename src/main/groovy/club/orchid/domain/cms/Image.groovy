@@ -14,8 +14,10 @@ class Image extends CmsEntry<Image> {
     @Primitive
     String mime
 
+    byte[] bytes
+
     @Override
     String getContent() {
-        return null
+        return content
     }
 }

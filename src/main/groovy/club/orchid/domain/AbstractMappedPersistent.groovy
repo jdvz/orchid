@@ -8,10 +8,9 @@ import groovy.transform.Canonical
  * @date: 2/14/16 4:27 PM
  */
 @Canonical
-abstract class AbstractMappedPersistent<T extends AbstractMappedPersistent> extends AbstractMapper {
+abstract class AbstractMappedPersistent<T extends AbstractMappedPersistent> extends AbstractPersistent<T> {
     @Id
     long id
-    boolean lazy
 
     boolean isPersistent() { id > 0 }
 }

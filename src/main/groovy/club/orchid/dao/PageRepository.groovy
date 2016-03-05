@@ -1,7 +1,6 @@
 package club.orchid.dao
 
 import club.orchid.domain.cms.CmsPage
-import club.orchid.domain.cms.CmsPageContent
 import club.orchid.domain.cms.ContentPage
 import club.orchid.domain.cms.MultiCmsPage
 import club.orchid.domain.cms.Page
@@ -18,12 +17,13 @@ interface PageRepository {
     List<Page> subpages(long mainPageId)
     List<Page> chapters(long contentPageId)
     Optional<Page> page(String prettyUrl)
+    public <T extends Page> Optional<T> page(long pageId)
     Optional<MultiCmsPage> page(String prettyUrl, int num)
 
-    List<String> pageContent(long pageId)
+    String pageContentPath(long pageId)
 
-    CmsPage create(final PageCommand pageCommand)
+    CmsPage create(final CmsPage cmsPage, final PageCommand pageCommand)
+    ContentPage create(final ContentPage cmsPage, final PageCommand pageCommand)
     CmsPage update(final CmsPage cmsPage, final PageCommand pageCommand)
-    CmsPage create(final List<CmsPageContent> cmsPageContent, final CmsPage page)
-    CmsPage update(final List<CmsPageContent> cmsPageContent, final CmsPage page)
+    ContentPage update(final ContentPage contentPage, final PageCommand pageCommand)
 }

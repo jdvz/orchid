@@ -3,6 +3,7 @@ package club.orchid.strategy
 import club.orchid.anno.strategy.PageStrategy
 import club.orchid.domain.cms.ContentPage
 import club.orchid.domain.cms.MultiCmsPage
+import club.orchid.web.forms.PageCommand
 import org.springframework.stereotype.Component
 
 import java.sql.ResultSet
@@ -38,5 +39,10 @@ class MultiCmsPageContentStrategy extends PageContentStrategy<MultiCmsPage> {
     @Override
     Class<MultiCmsPage> getPageClass() {
         return MultiCmsPage.class
+    }
+
+    @Override
+    MultiCmsPage savePage(MultiCmsPage multiCmsPage, PageCommand pageCommand) {
+        return null
     }
 }

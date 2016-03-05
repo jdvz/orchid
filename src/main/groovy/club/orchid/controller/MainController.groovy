@@ -1,5 +1,6 @@
 package club.orchid.controller
 
+import club.orchid.service.IPageService
 import club.orchid.service.IUserService
 import club.orchid.service.UserService
 import org.springframework.beans.factory.annotation.Autowired
@@ -19,10 +20,13 @@ import java.security.Principal
 @Controller
 @RequestMapping('/')
 class MainController extends AbstractController {
+    @Autowired
+    private IPageService pageService
 
     @RequestMapping(value = ['/','/index.html'], method = RequestMethod.GET)
     public String main(final Model model, final Principal principal) {
         model.addAttribute('title', 'start')
+        model.addAttribute('pages', pageService.contentpages())
         model.addAttribute('user', userService.loadUserByUsername(principal?.name))
         return 'index'
     }
