@@ -1,7 +1,6 @@
 package club.orchid.config
 
 import club.orchid.service.IUserService
-import club.orchid.service.UserService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.AutoConfigureAfter
 import org.springframework.boot.autoconfigure.security.SecurityProperties
@@ -13,6 +12,8 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
+import org.springframework.security.core.session.SessionRegistry
+import org.springframework.security.core.session.SessionRegistryImpl
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.AuthenticationEntryPoint
@@ -26,12 +27,15 @@ import org.springframework.security.web.access.AccessDeniedHandler
 @Configuration
 @EnableWebSecurity
 @Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)
-@EnableGlobalMethodSecurity(prePostEnabled = true)
+@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 @AutoConfigureAfter(JdbcConfigurer.class)
 class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
     @Autowired
     IUserService userService
-
+    @Autowired
+    SessionRegistry sessionRegistry
+    @Autowired
+    PasswordEncoder passwordEncoder
     @Autowired(required = false)
     AuthenticationEntryPoint authenticationEntryPoint
     @Autowired(required = false)
@@ -43,12 +47,14 @@ class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
             .authorizeRequests()
                 .antMatchers('/resources/**').permitAll()
 //                .anyRequest().anonymous()
-                .antMatchers('/admin').hasRole('ADMIN')
-                .antMatchers('/club').fullyAuthenticated()
+                .antMatchers('/admin/**').hasRole('ADMIN')
+                .antMatchers('/club/**').hasAnyRole('ADMIN', 'CUSTOMER', 'MANAGER')
                 .and()
             .sessionManagement()
                 .maximumSessions(1)
                 .maxSessionsPreventsLogin(false)
+                .expiredUrl('/login?expired')
+                .sessionRegistry(sessionRegistry)
                 .and().and()
 //            .exceptionHandling()
 //                .authenticationEntryPoint(authenticationEntryPoint)
@@ -73,8 +79,13 @@ class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public PasswordEncoder passwortEncoder() {
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder()
+    }
+
+    @Bean(name = 'sessionRegistry')
+    public SessionRegistry sessionRegistry() {
+        return new SessionRegistryImpl();
     }
 
     @Autowired
@@ -82,6 +93,6 @@ class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
         auth
 //                .getDefaultUserDetailsService()
                 .userDetailsService(userService)
-                .passwordEncoder(passwortEncoder())
+                .passwordEncoder(passwordEncoder)
     }
 }

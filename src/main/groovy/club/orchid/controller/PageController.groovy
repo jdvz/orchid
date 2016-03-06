@@ -13,6 +13,7 @@ import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestMethod
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.servlet.mvc.support.RedirectAttributes
 
 import javax.validation.Valid
@@ -32,19 +33,18 @@ class PageController extends AbstractController {
     protected MainApplicationContext context
 
     @RequestMapping(value = '/{prettyUrl}.html', method = RequestMethod.GET)
-    public String page(@PathVariable final String prettyUrl, final Model model, final Principal principal) {
+    public String page(@PathVariable final String prettyUrl, final Model model) {
         CmsPage page = pageService.page(prettyUrl).orElse(AuthenticationUtils.page404)
         model.addAttribute('templateName', "layout/${page.template}")
         model.addAttribute('page', page)
         model.addAttribute('pages', pageService.pages())
         model.addAttribute('current', page.mainPage?.id)
-        model.addAttribute('user', userService.loadUserByUsername(principal?.name))
         return "${page.pageName}"
     }
 
     @Secured('ADMIN')
     @RequestMapping(value = '/{prettyUrl}/edit.html', method = RequestMethod.GET)
-    public String edit(@PathVariable final String prettyUrl, final Model model, final Principal principal, final RedirectAttributes redirectAttributes) {
+    public String edit(@PathVariable final String prettyUrl, final Model model, final RedirectAttributes redirectAttributes) {
         Optional<CmsPage> optional = pageService.page(prettyUrl)
         if (optional.isPresent()) {
             Page page = optional.get()
@@ -69,7 +69,8 @@ class PageController extends AbstractController {
 
     @Secured('ADMIN')
     @RequestMapping(value = '/{prettyUrl}/create.html', method = RequestMethod.GET)
-    public String create(@PathVariable final String prettyUrl, final Model model, final Principal principal, final RedirectAttributes redirectAttributes) {
+    public String create(@PathVariable final String prettyUrl, @RequestParam(required = false, defaultValue = '0') final long pageId,
+                         final Model model) {
         model.addAttribute('pageCommand', new PageCommand(
                 pageId: 0,
                 prettyUrl: prettyUrl,
@@ -77,7 +78,7 @@ class PageController extends AbstractController {
                 name: '',
                 type: 'CmsPageContent',
                 template: 'page',
-                mainPageId: 0,
+                mainPageId: pageId,
                 types: pageService.allowedTypes(),
                 templates: pageService.allowedTemplates(),
                 contentPages: pageService.allowedPages()
@@ -89,9 +90,10 @@ class PageController extends AbstractController {
     @RequestMapping(value = '/{prettyUrl}/edit.html', method = RequestMethod.POST)
     public String edit(@PathVariable final String prettyUrl,
                        @Valid final PageCommand pageCommand,
-                       final Model model, final Principal principal, final RedirectAttributes redirectAttributes) {
+                       final Model model, final RedirectAttributes redirectAttributes) {
         try {
             pageService.save(pageCommand)
+            redirectAttributes.addFlashAttribute('message', 'Successful')
         } catch (IllegalArgumentException e) {
             redirectAttributes.addFlashAttribute('message', "Can\'t save ${prettyUrl}")
         }

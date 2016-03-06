@@ -24,28 +24,24 @@ class MainController extends AbstractController {
     private IPageService pageService
 
     @RequestMapping(value = ['/','/index.html'], method = RequestMethod.GET)
-    public String main(final Model model, final Principal principal) {
+    public String main(final Model model) {
         model.addAttribute('title', 'start')
         model.addAttribute('pages', pageService.pages())
-        model.addAttribute('user', userService.loadUserByUsername(principal?.name))
         return 'index'
     }
 
     @RequestMapping(value = ['/test.html'], method = RequestMethod.GET)
-    public String test(final Model model, final Principal principal) {
-        model.addAttribute('DECORATOR_TITLE', 'Variant page')
-        model.addAttribute('CONTENT_TITLE', 'Main content')
+    public String test(final Model model) {
+        model.addAttribute('title', 'test title')
         model.addAttribute('templateName', "layout/main")
-        model.addAttribute('user', userService.loadUserByUsername(principal?.name))
         return 'test'
     }
 
     @RequestMapping(value = ['/test/{templateName}.html'], method = RequestMethod.GET)
-    public String variant(@PathVariable final String templateName, final Model model, final Principal principal) {
+    public String variant(@PathVariable final String templateName, final Model model) {
         model.addAttribute('DECORATOR_TITLE', 'Variant page')
         model.addAttribute('CONTENT_TITLE', 'Main content')
         model.addAttribute('templateName', "layout/$templateName")
-        model.addAttribute('user', userService.loadUserByUsername(principal?.name))
         return 'test'
     }
 }

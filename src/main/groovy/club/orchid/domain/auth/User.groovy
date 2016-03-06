@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails
  */
 @Canonical
 class User extends AbstractMappedPersistent<User> implements UserDetails {
+    public static final long serialVersionUID = 1l
     @Primitive
     String firstName
     @Primitive
@@ -31,6 +32,7 @@ class User extends AbstractMappedPersistent<User> implements UserDetails {
     boolean enabled
 
     transient boolean anonymous
+    transient boolean clearAuthorization
 
     String roles
 

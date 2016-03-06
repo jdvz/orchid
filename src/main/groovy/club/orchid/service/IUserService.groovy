@@ -1,7 +1,8 @@
 package club.orchid.service
 
+import club.orchid.domain.auth.Role
 import club.orchid.domain.auth.User
-import club.orchid.web.forms.UserCreateForm
+import club.orchid.web.forms.UserObject
 import org.springframework.security.core.userdetails.UserDetailsService
 
 /**
@@ -12,5 +13,6 @@ import org.springframework.security.core.userdetails.UserDetailsService
 interface IUserService extends UserDetailsService {
     Optional<User> getUserById(long id);
     Collection<User> getAllUsers();
-    User create(UserCreateForm form);
+    User save(UserObject form);
+    List<Role> roles()
 }

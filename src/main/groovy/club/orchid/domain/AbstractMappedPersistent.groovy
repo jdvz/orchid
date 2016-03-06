@@ -9,6 +9,7 @@ import groovy.transform.Canonical
  */
 @Canonical
 abstract class AbstractMappedPersistent<T extends AbstractMappedPersistent> extends AbstractPersistent<T> {
+    public static final long serialVersionUID = 1l
     @Id
     long id
 

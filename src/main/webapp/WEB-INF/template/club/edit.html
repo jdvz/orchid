@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layout/main">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+<div layout:fragment="content">
+    <!--/*@thymesVar id="userObject" type="club.orchid.web.forms.UserObject"*/-->
+    <form action="edit.html" method="post" th:action="@{/club/edit.html}" th:object="${userObject}">
+        <input type="submit" th:value="#{edit.submit}" value="submit" />
+        <div class="editmarkup">
+            <input type="hidden" th:value="${userObject.userId}" name="userId" />
+            <label><th:block th:text="#{edit.email}" /><input type="text" name="email" th:value="${userObject.email}" /> </label>
+            <label><th:block th:text="#{edit.first.name}" /><input type="text" name="firstName" th:value="${userObject.firstName}" /></label>
+            <label><th:block th:text="#{edit.last.name}" /><input type="text" name="lastName" th:value="${userObject.lastName}" /></label>
+            <label><th:block th:text="#{edit.password}" /><input type="password" name="password" value="" /></label>
+            <label><th:block th:text="#{edit.repeat.password}" /><input type="password" name="passwordRepeated" value="" /></label>
+            <label><th:block th:text="#{edit.properties}" /><dl>
+                <dt th:text="#{user.accountNonExpired}"></dt>
+                <dd><input type="checkbox" name="accountNonExpired" th:checked="${userObject.accountNonExpired}" /></dd>
+                <dt th:text="#{user.accountNonLocked}"></dt>
+                <dd><input type="checkbox" name="accountNonLocked" th:checked="${userObject.accountNonLocked}" /></dd>
+                <dt th:text="#{user.credentialsNonExpired}"></dt>
+                <dd><input type="checkbox" name="credentialsNonExpired" th:checked="${userObject.credentialsNonExpired}" /></dd>
+                <dt th:text="#{user.enabled}"></dt>
+                <dd><input type="checkbox" name="enabled" th:checked="${userObject.enabled}" /></dd>
+            </dl></label>
+            <label><th:block th:text="#{edit.user.roles}" />
+                <!--/*@thymesVar id="role" type="java.util.Map.Entry"*/-->
+                <label data-th-each="role : ${userObject.allRoles}">
+                       <th:block th:text="${role.key.roleName}" /><input type="checkbox" name="role" th:name="'allRoles[' + ${role.key.roleName} + ']'"
+                                                                         value="on" th:checked="${role.value}"/></label>
+            </label>
+        </div>
+    </form>
+</div>
+</body>
+</html>

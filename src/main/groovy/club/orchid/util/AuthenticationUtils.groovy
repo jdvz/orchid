@@ -24,4 +24,8 @@ class AuthenticationUtils {
 
     private AuthenticationUtils() {
     }
+
+    public static String getDbRoleName(final String roleName) {
+        return roleName.replace(/ROLE_/, '').toLowerCase()
+    }
 }

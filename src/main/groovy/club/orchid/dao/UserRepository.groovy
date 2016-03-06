@@ -2,6 +2,7 @@ package club.orchid.dao
 
 import club.orchid.domain.auth.Role
 import club.orchid.domain.auth.User
+import club.orchid.web.forms.UserObject
 
 /**
  * Created with IntelliJ IDEA.
@@ -12,6 +13,7 @@ interface UserRepository extends PersistentRepository<User> {
     Optional<User> get(long id)
     Optional<User> get(Map<String, Object> params)
     Collection<User> list()
-    long save(User user)
+    List<Role> roles()
+    User save(User user, UserObject userObject)
     Collection<Role> getUserRoles(long l)
 }

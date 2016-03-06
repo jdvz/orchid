@@ -19,7 +19,7 @@ ul, ol {
     float: left;
 }
 
-form.login, .logged {
+form.login, form.logout, .logged {
     width: 400px;
     float: right;
 }

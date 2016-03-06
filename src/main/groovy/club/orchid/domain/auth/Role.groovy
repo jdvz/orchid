@@ -12,6 +12,7 @@ import org.springframework.security.core.GrantedAuthority
  */
 @Canonical
 class Role extends AbstractMappedPersistent<Role> implements GrantedAuthority {
+    public static final long serialVersionUID = 1l
     @Primitive
     String roleName
 
