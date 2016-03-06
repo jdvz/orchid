@@ -88,3 +88,7 @@ input[type=submit]:hover, .button:hover {
 .user-form input, .user-form span {
     display: inline-block;
 }
+
+.table-container {
+    overflow: auto;
+}

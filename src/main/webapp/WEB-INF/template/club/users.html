@@ -8,7 +8,7 @@
     <title th:text="user.page">user page</title>
 </head>
 <body>
-<div layout:fragment="content">
+<div layout:fragment="content" class="table-container">
     <table>
         <thead>
         <tr>
@@ -17,7 +17,7 @@
             <th class="last-name name" th:text="#{user.last.name}"></th>
             <th class="checkboxes" th:text="#{user.settings}"></th>
             <th class="roles" th:text="#{user.roles}"></th>
-            <th class="actions" sec:authorize="hasRole('ROLE_ADMON')"><a
+            <th class="actions" sec:authorize="hasRole('ROLE_ADMIN')"><a
                     class="button" href="edit.html" th:action="@{/club/create.html}" th:text="edit.new.user">create</a></th>
         </tr>
         </thead>
@@ -38,8 +38,8 @@
                 <dd><input type="checkbox" disabled="disabled" th:checked="${user.enabled}" /></dd>
             </dl></td>
             <td th:text="${user.roles}">roles</td>
-            <td class="actions" sec:authorize="hasRole('ROLE_ADMON')">
-                <a class="button" href="edit.html" th:action="@{/club/edit.html(id=${user.id})}" th:text="#{user.edit}">edit</a>
+            <td class="actions" sec:authorize="hasRole('ROLE_ADMIN')">
+                <a class="button" href="edit.html" th:href="@{/club/edit.html(id=${user.id})}" th:text="#{user.edit}">edit</a>
                 <form action="users.html" th:action="@{/club/delete.html(id=${user.id})}" method="post">
                     <input type="submit" th:value="#{user.delete}" value="delete" />
                 </form>
