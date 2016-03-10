@@ -34,7 +34,7 @@ CREATE TABLE multi_cms_pages (
   FOREIGN KEY(id) REFERENCES cms_pages(id)
 );
 
-INSERT INTO cms_entries (name, pretty_url, discriminator) VALUES ('main content', 'how-to-start', 'ContentPage');
+INSERT INTO cms_entries (name, pretty_url, discriminator) VALUES ('main content', 'how-to-start', 'CmsPage');
 INSERT INTO cms_entries (name, pretty_url) VALUES ('first page', 'how-to-start-show');
 
 INSERT INTO pages (id, template) select id, 'main' from cms_entries;
