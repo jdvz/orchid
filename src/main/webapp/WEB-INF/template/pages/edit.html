@@ -9,24 +9,24 @@
 <body>
 <div layout:fragment="content">
     <!--/*@thymesVar id="pageCommand" type="club.orchid.web.forms.PageCommand"*/-->
-    <form action="edit.html" method="post" th:action="@{/page/{url}/edit.html(url=${prettyUrl})}" th:object="${pageCommand}">
+    <form class="entity" action="edit.html" method="post" th:action="@{/page/{url}/edit.html(url=${prettyUrl})}" th:object="${pageCommand}">
         <input type="submit" th:value="#{edit.submit}" value="submit" />
         <div class="editmarkup">
             <input type="hidden" th:value="${pageCommand.pageId}" name="pageId" />
-            <label><th:block th:text="#{edit.name}" /><input type="text" th:value="${pageCommand.name}" name="name" value="name" /></label>
-            <label><th:block th:text="#{edit.pretty.url}" /><input type="text" th:value="${pageCommand.prettyUrl}" name="prettyUrl" value="pretty url" /></label>
-            <label><th:block th:text="#{edit.template}" /><select th:field="*{template}">
+            <label><th:block th:text="#{page.name}" /><input type="text" th:value="${pageCommand.name}" name="name" value="name" /></label>
+            <label><th:block th:text="#{page.pretty.url}" /><input type="text" th:value="${pageCommand.prettyUrl}" name="prettyUrl" value="pretty url" /></label>
+            <label><th:block th:text="#{page.template}" /><select th:field="*{template}">
                 <option th:each="template : ${pageCommand.templates}" th:value="${template}" th:text="${template}">template</option>
             </select></label>
-            <label><th:block th:text="#{edit.main.page}" /><select th:field="*{mainPageId}">
+            <label><th:block th:text="#{page.main.page}" /><select th:field="*{mainPageId}">
                 <option th:each="page : ${pageCommand.contentPages}" th:value="${page.id}" th:text="${page.name}">content page</option>
             </select></label>
-            <label><th:block th:text="#{edit.type}" /><select id="type" th:field="*{type}">
+            <label><th:block th:text="#{page.type}" /><select id="type" th:field="*{type}">
                 <option th:each="type : ${pageCommand.types}" th:value="${type}" th:text="${type}">page type</option>
             </select></label>
             <div class="clearer"></div>
         </div>
-        <label id="editor" class="textarea"><th:block th:text="#{edit.content}" /><textarea id="editor1" name="content" th:text="${pageCommand.content}">content</textarea></label>
+        <label id="editor" class="textarea"><th:block th:text="#{page.content}" /><textarea id="editor1" name="content" th:text="${pageCommand.content}">content</textarea></label>
     </form>
 </div>
 </body>

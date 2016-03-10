@@ -10,9 +10,9 @@
         <h3>Hello <th:block sec:authentication="principal.fullName">%username%</th:block>!!!</h3>
         <span sec:authorize="hasRole('ROLE_ADMIN')">
             <th:block th:if="${page != null}">
-                <a class="button" href="../pages/edit.html" th:href="@{/page/{url}/edit.html(url=${page.prettyUrl})}" th:text="#{page.edit}">edit page</a>
+                <a class="button" href="../pages/edit.html" th:href="@{/page/{url}/edit.html(url=${page.prettyUrl})}" th:text="#{edit.page}">edit page</a>
             </th:block>
-            <a class="button" href="../pages/edit.html" th:href="@{/page/newpage/create.html(pageId=${page == null ? 0 : page.id})}" th:text="#{page.create}">edit page</a>
+            <a class="button" href="../pages/edit.html" th:href="@{/page/newpage/create.html(pageId=${page == null ? 0 : page.id})}" th:text="#{edit.page.create}">edit page</a>
         </span>
         <input type="submit" value="Sign Out" th:value="#{user.signout}"/>
     </form>

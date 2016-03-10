@@ -11,27 +11,22 @@ ul, ol {
     background: #fed8d5 url(../images/orchid-temp.jpeg) no-repeat left top;
     height: 102px;
 }
-
 #logo {
     display: block;
     width: 102px;
     height: 102px;
     float: left;
 }
-
 form.login, form.logout, .logged {
     width: 400px;
     float: right;
 }
-
 form.login label {
     width: 350px;
 }
-
 form.login label > input[type=text], form.login label > input[type=password] {
     width: 200px;
 }
-
 input[type=submit],.button {
     font-family: Arial, Helvetica, sans-serif;
     font-size: 14px;
@@ -58,37 +53,33 @@ input[type=submit],.button {
 input[type=submit] {
     padding: 9px 15px;
 }
-
 input[type=submit]:hover, .button:hover {
     text-shadow: 0;
     box-shadow: 0 0 1px #000;
     background-color: #f5f5f5;
     cursor: pointer;
 }
-
 .page-container {
     overflow: hidden;
 }
-
 .side-bar {
     float: left;
     width: 300px;
     margin-bottom: -5000px;
     padding-bottom: 5000px;
 }
-
 .hidden {
     display: none;
 }
-
 .current a {
     text-decoration: none;
 }
-
 .user-form input, .user-form span {
     display: inline-block;
 }
-
 .table-container {
     overflow: auto;
+}
+.settings dl {
+
 }

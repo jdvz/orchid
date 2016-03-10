@@ -46,7 +46,7 @@ class UserObject {
 
     void initRoles(final List<Role> roles) {
         roles.each { Role r ->
-            allRoles.put(r, this.ownRoles?.contains(r.roleName))
+            allRoles.put(r, this.ownRoles?.contains(r.roleName) ?: false)
         }
     }
 }

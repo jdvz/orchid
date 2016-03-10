@@ -1,11 +1,11 @@
-form {
+form.entity {
     background-color: lemonchiffon;
 }
-form label.textarea {
+form.entity label.textarea {
     clear: both;
     width: 100%;
 }
-form input[type = submit] {
+form.entity input[type = submit] {
     float: right;
     display: inline-block;
     border-radius: 5px;
@@ -16,8 +16,14 @@ form input[type = submit] {
     text-decoration: none;
     text-shadow: 1px 1px rgba(255, 255, 255, 0.4), -1px -1px rgba(0, 0, 0, 0.075);
 }
-form textarea {
+form.entity textarea {
     width: 100%;
+}
+form span.form-header {
+    font-size: larger;
+}
+form.entity .settings input[type=checkbox] {
+    width: 100px;
 }
 .editmarkup {
     width: 400px;

@@ -58,7 +58,9 @@ class ClubController {
     @Secured(['ROLE_ADMIN'])
     @RequestMapping(value = '/create.html', method = RequestMethod.GET)
     public String create(final Model model) {
-        model.addAttribute('userObject', new UserObject())
+        def object = new UserObject()
+        object.initRoles(userService.roles())
+        model.addAttribute('userObject', object)
         return 'club/edit'
     }
 

@@ -5,7 +5,7 @@
       layout:decorator="layout/main">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title th:text="user.page">user page</title>
+    <title th:text="#{user.page}">user page</title>
 </head>
 <body>
 <div layout:fragment="content" class="table-container">
@@ -18,7 +18,7 @@
             <th class="checkboxes" th:text="#{user.settings}"></th>
             <th class="roles" th:text="#{user.roles}"></th>
             <th class="actions" sec:authorize="hasRole('ROLE_ADMIN')"><a
-                    class="button" href="edit.html" th:action="@{/club/create.html}" th:text="edit.new.user">create</a></th>
+                    class="button" href="edit.html" th:href="@{/club/create.html}" th:text="#{edit.user.create}">create</a></th>
         </tr>
         </thead>
         <tbody>
@@ -27,7 +27,7 @@
             <td th:text="${user.email}">email</td>
             <td th:text="${user.firstName}">first name</td>
             <td th:text="${user.lastName}">last name</td>
-            <td><dl>
+            <td><dl class="settings">
                 <dt th:text="#{user.accountNonExpired}"></dt>
                 <dd><input type="checkbox" disabled="disabled" th:checked="${user.accountNonExpired}" /></dd>
                 <dt th:text="#{user.accountNonLocked}"></dt>
@@ -39,9 +39,9 @@
             </dl></td>
             <td th:text="${user.roles}">roles</td>
             <td class="actions" sec:authorize="hasRole('ROLE_ADMIN')">
-                <a class="button" href="edit.html" th:href="@{/club/edit.html(id=${user.id})}" th:text="#{user.edit}">edit</a>
+                <a class="button" href="edit.html" th:href="@{/club/edit.html(id=${user.id})}" th:text="#{edit.user}">edit</a>
                 <form action="users.html" th:action="@{/club/delete.html(id=${user.id})}" method="post">
-                    <input type="submit" th:value="#{user.delete}" value="delete" />
+                    <input type="submit" th:value="#{edit.user.delete}" value="delete" />
                 </form>
             </td>
         </tr>
