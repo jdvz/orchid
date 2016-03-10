@@ -1,2 +1,9 @@
 *.class
 log/*
+.gradle/**
+.idea/**
+out/**
+build/**
+gradlew
+gradlew.bat
+orchid.*
