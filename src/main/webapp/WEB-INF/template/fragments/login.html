@@ -16,7 +16,7 @@
         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
         <div><label><th:block th:text="#{user.username}">User Name</th:block>: <input type="text" name="email"/></label></div>
         <div><label><th:block th:text="#{user.password}">Password</th:block>: <input type="password" name="password"/></label></div>
-        <div><input type="submit" th:value="#{sign.in}" value="Sign In"/></div>
+        <div><input type="submit" th:value="#{user.signin}" value="Sign In"/></div>
     </form>
 </div>
 </body>

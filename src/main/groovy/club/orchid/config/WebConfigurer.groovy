@@ -25,9 +25,7 @@ import org.thymeleaf.templateresolver.ServletContextTemplateResolver
 @Configuration
 @EnableWebMvc
 @ComponentScan(basePackages = ['club.orchids'])
-//@EnableConfigurationProperties(ThymeleafProperties.class)
 @ConditionalOnClass(SpringTemplateEngine.class)
-//@AutoConfigureAfter(WebMvcAutoConfiguration.class)
 class WebConfigurer extends WebMvcConfigurerAdapter {
     public static final Logger logger = LoggerFactory.getLogger(WebConfigurer.class)
 
@@ -76,7 +74,8 @@ class WebConfigurer extends WebMvcConfigurerAdapter {
     @Bean
     public ResourceBundleMessageSource messageSource() {
         ResourceBundleMessageSource resourceBundleMessageSource = new ResourceBundleMessageSource();
-        resourceBundleMessageSource.setBasename("base");
+        resourceBundleMessageSource.setBasename('base');
+        resourceBundleMessageSource.setDefaultEncoding('UTF-8')
         return resourceBundleMessageSource;
     }
 }

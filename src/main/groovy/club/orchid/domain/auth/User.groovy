@@ -36,7 +36,8 @@ class User extends AbstractMappedPersistent<User> implements UserDetails {
 
     String roles
 
-    transient Collection<? extends GrantedAuthority>authorities
+    transient List<? extends GrantedAuthority>authorities
+    transient Optional<List<? extends GrantedAuthority>> optionalAuthority
 
     @Override
     String getUsername() {
@@ -47,7 +48,11 @@ class User extends AbstractMappedPersistent<User> implements UserDetails {
         [firstName, lastName].findAll { it }.join(' ')
     }
 
-    Collection<? extends GrantedAuthority> getAuthorities() {
+    List<? extends GrantedAuthority> getAuthorities() {
         return authorities ?: roles?.split(',')?.collect { new Role(roleName:it) } ?: Collections.emptyList()
+    }
+
+    Optional<List<? extends GrantedAuthority>> getOptionalAuthority() {
+        return optionalAuthority ?: Optional.ofNullable(roles?.split(',')?.collect { new Role(roleName:it) })
     }
 }

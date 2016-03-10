@@ -4,14 +4,14 @@
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
-    <title><th:block th:text="#{edit.page}" />[[${page.name}]]</title>
+    <title><th:block th:text="#{edit.page.title}" />[[${page.name}]]</title>
     <link rel="stylesheet" type="text/css" media="all"
           href="../../../resources/css/main.css" th:href="@{/resources/css/main.css}" />
     <link rel="stylesheet" type="text/css" media="all"
           href="../../../resources/css/edit.css" th:href="@{/resources/css/edit.css}" />
     <script type="text/javascript" src="../../../resources/js/main.js" th:src="@{/resources/js/main.js}"></script>
-    <script type="text/javascript" src="../../../resources/js/ckeditor.js" th:src="@{/resources/js/ckeditor.js}"></script>
-    <script type="text/javascript" src="../../../resources/js/config.js" th:src="@{/resources/js/config.js}"></script>
+    <script type="text/javascript" src="../../../resources/js/ckeditor/ckeditor.js" th:src="@{/resources/js/ckeditor/ckeditor.js}"></script>
+    <script type="text/javascript" src="../../../resources/js/ckeditor/config.js" th:src="@{/resources/js/ckeditor/config.js}"></script>
     <script type="text/javascript">
         function updateEditor() {
             var editor = document.getElementById('editor');

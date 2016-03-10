@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
 
+import java.util.function.Supplier
+
 import static org.junit.Assert.*
 /**
  * Created with IntelliJ IDEA.
@@ -18,6 +20,7 @@ import static org.junit.Assert.*
 public class QueryUtilsTest {
     @Autowired
     PasswordEncoder passwortEncoder
+
 
     public static final String VASIA = 'Vasia'
 
@@ -45,7 +48,7 @@ public class QueryUtilsTest {
     public void createPassword() throws Exception {
         def encoder = new BCryptPasswordEncoder()
         def pwd = encoder.encode('123')
-        println pwd
+        println "encoded password $pwd"
         assertTrue('Test password', encoder.matches('123', pwd))
     }
 

@@ -42,7 +42,7 @@ class PageController extends AbstractController {
         return "${page.pageName}"
     }
 
-    @Secured('ADMIN')
+    @Secured('ROLE_ADMIN')
     @RequestMapping(value = '/{prettyUrl}/edit.html', method = RequestMethod.GET)
     public String edit(@PathVariable final String prettyUrl, final Model model, final RedirectAttributes redirectAttributes) {
         Optional<CmsPage> optional = pageService.page(prettyUrl)
@@ -67,7 +67,7 @@ class PageController extends AbstractController {
         }
     }
 
-    @Secured('ADMIN')
+    @Secured('ROLE_ADMIN')
     @RequestMapping(value = '/{prettyUrl}/create.html', method = RequestMethod.GET)
     public String create(@PathVariable final String prettyUrl, @RequestParam(required = false, defaultValue = '0') final long pageId,
                          final Model model) {
@@ -86,7 +86,7 @@ class PageController extends AbstractController {
         return "pages/edit"
     }
 
-    @Secured('ADMIN')
+    @Secured('ROLE_ADMIN')
     @RequestMapping(value = '/{prettyUrl}/edit.html', method = RequestMethod.POST)
     public String edit(@PathVariable final String prettyUrl,
                        @Valid final PageCommand pageCommand,

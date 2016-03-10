@@ -119,7 +119,7 @@ WHERE entry.enabled = :enabled AND page.main_page_id = :main_page_id""", [enable
         long id = keyHolder.key?.longValue()
         jdbcTemplate.update('''INSERT INTO pages(id, main_page_id, template) VALUES (:id, :main_page_id, :template)''',
                 new MapSqlParameterSource([id: id, main_page_id: pageCommand.mainPageId ?: null, template: pageCommand.template]))
-        jdbcTemplate.update('''INSERT INTO cms_pages(id, content_page_id) VALUES (:id, :content_page_id)''',
+        jdbcTemplate.update('''INSERT INTO cms_pages(id) VALUES (:id)''',
                 new MapSqlParameterSource([id: id, content_page_id: pageCommand.mainPageId]))
         jdbcTemplate.update('''INSERT INTO cms_page_content(id, path) VALUES (:id, :path)''', [id: id, path: pageCommand.prettyUrl])
 
