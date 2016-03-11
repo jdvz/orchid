@@ -13,6 +13,8 @@ import org.springframework.web.multipart.MultipartFile
  */
 interface IResourceService {
     Image getOrCreateImage(final String imageName, final String prettyUrl)
+    Image createImage(final String imageName)
+    Image createImage(final String imageName, final String prettyUrl)
     String getCmsFullPageContent(String prettyUrl)
     boolean deleteCmsPageContent(String prettyUrl)
     Image save(final Image image, final MultipartFile file)

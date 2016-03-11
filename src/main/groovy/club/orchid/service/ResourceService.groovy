@@ -43,6 +43,16 @@ class ResourceService implements IResourceService {
     }
 
     @Override
+    Image createImage(String imageName, String prettyUrl = imageName + UUID.randomUUID()) {
+        return new Image(
+                lazy: true,
+                name: imageName,
+                prettyUrl: prettyUrl,
+                realName: UUID.randomUUID(),
+                discriminator: 'Image')
+    }
+
+    @Override
     String getCmsFullPageContent(String prettyUrl) {
         final File file = new File("${pathHtmls}/${prettyUrl}.html")
         return file.exists() ? file.text : ''

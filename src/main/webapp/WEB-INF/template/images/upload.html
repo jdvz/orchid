@@ -14,7 +14,7 @@
     <form method="post" th:action="@{/images/upload.html}" action="upload.html" enctype="multipart/form-data">
         <div><label><th:block th:text="image.name">Image Name</th:block>: <input type="text" name="name"/></label></div>
         <div><label><th:block th:text="image.prettyUrl">Pretty url</th:block>: <input type="text" name="prettyUrl"/></label></div>
-        <div><label><th:block th:text="image.file">File</th:block>: <input type="file" name="file"/></label></div>
+        <div><label><th:block th:text="image.file">File</th:block>: <input type="file" name="upload"/></label></div>
         <div><input type="submit" value="Upload"/></div>
     </form>
 </div>
