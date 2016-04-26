@@ -12,6 +12,7 @@ import org.springframework.core.env.Environment
 import org.springframework.data.solr.core.SolrTemplate
 import org.springframework.data.solr.repository.config.EnableSolrRepositories
 import org.springframework.data.solr.server.support.EmbeddedSolrServerFactoryBean
+import org.springframework.data.solr.server.support.HttpSolrClientFactoryBean
 
 /**
  *
@@ -26,17 +27,15 @@ import org.springframework.data.solr.server.support.EmbeddedSolrServerFactoryBea
 @AutoConfigureAfter(WebSecurityConfigurer.class)
 class StandaloneSolrConfigurer {
     static final String SOLR_HOST = 'solr.host';
-    public static final String SOLR_HOME = 'solr.home'
 
     @Autowired
     private Environment environment;
 
-/*
     @Bean
-    public HttpSolrServerFactoryBean solrServerFactoryBean() {
-        HttpSolrServerFactoryBean factory = new HttpSolrServerFactoryBean();
+    public HttpSolrClientFactoryBean solrServerFactoryBean() {
+        HttpSolrClientFactoryBean factory = new HttpSolrClientFactoryBean();
 
-        factory.setUrl(environment.getRequiredProperty("solr.host"));
+        factory.setUrl(environment.getRequiredProperty(SOLR_HOST));
 
         return factory;
     }
@@ -45,5 +44,4 @@ class StandaloneSolrConfigurer {
     public SolrTemplate solrTemplate() throws Exception {
         return new SolrTemplate(solrServerFactoryBean().getObject());
     }
-*/
 }

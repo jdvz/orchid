@@ -19,11 +19,10 @@ import org.springframework.data.solr.server.support.EmbeddedSolrServerFactoryBea
  */
 @Configuration
 @EnableSolrRepositories(basePackages=['club.orchid.dao.product'], multicoreSupport=true)
-//@Profile("dev")
+@Profile("embedded")
 @PropertySource("classpath:application.properties")
 @AutoConfigureAfter(WebSecurityConfigurer.class)
 class EmbeddedSolrConfigurer {
-    public static final String SOLR_HOST = 'solr.host';
     public static final String SOLR_HOME = 'solr.home'
 
     @Autowired
