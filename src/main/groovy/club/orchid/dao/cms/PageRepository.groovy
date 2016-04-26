@@ -1,4 +1,4 @@
-package club.orchid.dao
+package club.orchid.dao.cms
 
 import club.orchid.domain.cms.CmsPage
 import club.orchid.web.forms.PageCommand

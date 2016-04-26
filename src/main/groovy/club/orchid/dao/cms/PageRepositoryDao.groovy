@@ -1,5 +1,6 @@
-package club.orchid.dao
+package club.orchid.dao.cms
 
+import club.orchid.dao.PersistentRepositoryDao
 import club.orchid.dao.mapper.PageMapper
 import club.orchid.dao.mapper.RowPageMapper
 import club.orchid.domain.cms.CmsPage

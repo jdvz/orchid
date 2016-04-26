@@ -1,9 +1,8 @@
 package club.orchid.service
 
 import club.orchid.Constants
-import club.orchid.dao.PageRepository
+import club.orchid.dao.cms.PageRepository
 import club.orchid.domain.cms.CmsPage
-import club.orchid.domain.cms.Page
 import club.orchid.strategy.PageContentStrategy
 import club.orchid.web.forms.PageCommand
 import org.apache.log4j.Logger

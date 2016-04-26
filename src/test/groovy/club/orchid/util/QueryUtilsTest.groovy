@@ -3,10 +3,12 @@ package club.orchid.util
 import club.orchid.domain.auth.User
 import club.orchid.domain.cms.CmsPage
 import club.orchid.domain.cms.Page
+import jdk.internal.util.xml.impl.Pair
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
+import org.springframework.util.CollectionUtils
 
 import java.util.function.Supplier
 
@@ -57,5 +59,11 @@ public class QueryUtilsTest {
         println CmsPage.class.isAssignableFrom(Page.class)
         println Page.class.isAssignableFrom(CmsPage.class)
         println CmsPage.class.isAssignableFrom(CmsPage.class)
+    }
+
+    @Test
+    public void testStreamMapp() throws Exception {
+        List<Map.Entry<String, String>> pairs = [new MapEntry('test-1', 'test-1-1'), new MapEntry('test-1', 'test-1-2'), new MapEntry('test-2', 'test-2-2')]
+//        pairs.stream().
     }
 }
