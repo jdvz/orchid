@@ -16,17 +16,28 @@
     import ch.qos.logback.core.ConsoleAppender
     import ch.qos.logback.core.rolling.RollingFileAppender
     import ch.qos.logback.core.rolling.TimeBasedRollingPolicy
-
+    import ch.qos.logback.core.status.OnConsoleStatusListener
+    
     import static ch.qos.logback.classic.Level.DEBUG
     import static ch.qos.logback.classic.Level.INFO
+
+    displayStatusOnConsole()
+    scan('5 minutes')  // Scan for changes every 5 minutes.
 
     setupAppenders()
     setupLogger()
 
+    def displayStatusOnConsole() {
+        statusListener OnConsoleStatusListener
+    }
+
     def setupAppenders() {
-        def logpath = "log"
+        def logpath = System.getProperty('logging.path', 'log')
         def logfileDate = timestamp('yyyy-MM-dd')
         def filePatternFormat = "%d{HH:mm:ss.SSS} %-5level %logger - %msg%n"
+
+        addInfo "$logpath - ${System.getProperty('logging.path')}"
+        addInfo "env: ${System.properties['app.env']}"
 
         appender("STDOUT", ConsoleAppender) {
             encoder(PatternLayoutEncoder) {
@@ -63,8 +74,8 @@
     }
 
     def getLogLevel() {
+//        (isDevelopmentEnv() ? DEBUG : INFO)
         INFO
-    //    (isDevelopmentEnv() ? DEBUG : INFO)
     }
 
     def isDevelopmentEnv() {

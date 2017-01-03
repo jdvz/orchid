@@ -1,16 +1,11 @@
 package club.orchid.service
 
-import club.orchid.dao.ResourceDao
-import club.orchid.domain.cms.CmsPage
-import club.orchid.domain.cms.CmsPageContent
+import club.orchid.dao.resource.ResourceDao
 import club.orchid.domain.cms.Image
 import club.orchid.web.forms.PageCommand
 import org.apache.log4j.Logger
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
-import org.springframework.http.HttpEntity
-import org.springframework.http.HttpHeaders
-import org.springframework.http.MediaType
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.util.FileCopyUtils
@@ -26,9 +21,9 @@ class ResourceService implements IResourceService {
     private static final Logger log = Logger.getLogger(ResourceService.class.name)
     @Autowired
     ResourceDao resourceDao
-    @Value('${path.images:/opt/resources/images}')
+    @Value('${path.images:resources/images}')
     String pathImages
-    @Value('${path.htmls:/opt/resources/html}')
+    @Value('${path.htmls:resources/html}')
     String pathHtmls
 
     @Override

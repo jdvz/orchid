@@ -1,9 +1,8 @@
-package club.orchid.dao
+package club.orchid.dao.user
 
+import club.orchid.dao.PersistentRepositoryDao
 import club.orchid.domain.auth.Role
 import club.orchid.domain.auth.User
-import club.orchid.domain.auth.UserRole
-import club.orchid.util.AuthenticationUtils
 import club.orchid.util.QueryUtils
 import club.orchid.web.forms.UserObject
 import org.apache.log4j.Logger

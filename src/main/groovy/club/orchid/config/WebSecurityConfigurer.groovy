@@ -34,7 +34,7 @@ class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
     IUserService userService
     @Autowired
     SessionRegistry sessionRegistry
-    @Autowired
+//    @Autowired
     PasswordEncoder passwordEncoder
     @Autowired(required = false)
     AuthenticationEntryPoint authenticationEntryPoint
@@ -78,9 +78,12 @@ class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
             .rememberMe()
     }
 
-    @Bean
+    @Bean(name = 'passwordEncoder')
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder()
+        if (!passwordEncoder) {
+            passwordEncoder = new BCryptPasswordEncoder()
+        }
+        return passwordEncoder
     }
 
     @Bean(name = 'sessionRegistry')
@@ -93,6 +96,6 @@ class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
         auth
 //                .getDefaultUserDetailsService()
                 .userDetailsService(userService)
-                .passwordEncoder(passwordEncoder)
+                .passwordEncoder(passwordEncoder())
     }
 }

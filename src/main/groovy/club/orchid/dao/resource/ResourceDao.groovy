@@ -1,5 +1,6 @@
-package club.orchid.dao
+package club.orchid.dao.resource
 
+import club.orchid.dao.PersistentRepository
 import club.orchid.domain.auth.User
 import club.orchid.domain.cms.Image
 

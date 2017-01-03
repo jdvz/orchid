@@ -1,7 +1,7 @@
-package club.orchid.dao
+package club.orchid.dao.resource
 
+import club.orchid.dao.PersistentRepositoryDao
 import club.orchid.domain.cms.Image
-import club.orchid.util.QueryUtils
 import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource
 import org.springframework.jdbc.support.GeneratedKeyHolder

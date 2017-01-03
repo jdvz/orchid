@@ -26,10 +26,16 @@ repositories {
 }
 
 flyway {
-    url = 'jdbc:mysql://localhost/orchid_db?useUnicode=true&amp;characterEncoding=utf8'
-    user = 'orchid'
-    password = 'orchid'
-    driver = 'com.mysql.jdbc.Driver'
+//    url='jdbc:mysql://localhost/orchid_db?useUnicode=true&amp;characterEncoding=utf8'
+//    user='orchid'
+//    password='orchid'
+//    driver='com.mysql.jdbc.Driver'
+    Properties props = new Properties()
+    props.load(new FileInputStream('src/main/resources/application.properties'))
+    url     = props['spring.datasource.url']
+    user    = props['spring.datasource.username']
+    password= props['spring.datasource.password']
+    driver  = props['spring.datasource.driver-class-name']
     encoding = 'utf8'
 }
 

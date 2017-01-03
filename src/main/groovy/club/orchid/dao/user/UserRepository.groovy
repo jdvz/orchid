@@ -1,5 +1,6 @@
-package club.orchid.dao
+package club.orchid.dao.user
 
+import club.orchid.dao.PersistentRepository
 import club.orchid.domain.auth.Role
 import club.orchid.domain.auth.User
 import club.orchid.web.forms.UserObject

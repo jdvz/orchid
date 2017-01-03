@@ -76,6 +76,7 @@ class WebConfigurer extends WebMvcConfigurerAdapter {
         ResourceBundleMessageSource resourceBundleMessageSource = new ResourceBundleMessageSource();
         resourceBundleMessageSource.setBasename('base');
         resourceBundleMessageSource.setDefaultEncoding('UTF-8')
+        resourceBundleMessageSource.setBasename("message");
         return resourceBundleMessageSource;
     }
 }

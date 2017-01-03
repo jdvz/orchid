@@ -10,6 +10,7 @@ import club.orchid.domain.product.Product
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.jdbc.support.GeneratedKeyHolder
 import org.springframework.jdbc.support.KeyHolder
+import org.springframework.stereotype.Repository
 
 /**
  *
@@ -17,6 +18,7 @@ import org.springframework.jdbc.support.KeyHolder
  * @link http://www.novardis.com/
  * @copyright 2016 NOVARDIS
  */
+@Repository('productRepository')
 class ProductRepositoryDao extends PersistentRepositoryDao<Product> implements ProductRepository {
     @Autowired
     private PageMapper pageMapper

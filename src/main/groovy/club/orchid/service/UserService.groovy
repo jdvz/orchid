@@ -1,15 +1,13 @@
 package club.orchid.service
 
-import club.orchid.dao.UserRepository
+import club.orchid.dao.user.UserRepository
 import club.orchid.domain.auth.Role
 import club.orchid.domain.auth.User
 import club.orchid.util.AuthenticationUtils
 import club.orchid.web.forms.UserObject
 import org.apache.log4j.Logger
-import org.apache.tomcat.util.net.jsse.openssl.Authentication
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Qualifier
-import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.core.session.SessionInformation
 import org.springframework.security.core.session.SessionRegistry
 import org.springframework.security.core.userdetails.UserDetails
@@ -18,8 +16,6 @@ import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.util.StringUtils
-
-import java.util.function.Supplier
 
 /**
  * Created with IntelliJ IDEA.

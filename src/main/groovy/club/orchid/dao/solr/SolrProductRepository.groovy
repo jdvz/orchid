@@ -1,4 +1,4 @@
-package club.orchid.dao
+package club.orchid.dao.solr
 
 import club.orchid.domain.product.Product
 import org.springframework.data.domain.Page
