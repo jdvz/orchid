@@ -12,6 +12,8 @@ class Image extends CmsEntry<Image> {
     @Primitive
     String realName
     @Primitive
+    String realDir
+    @Primitive
     String mime
 
     byte[] bytes

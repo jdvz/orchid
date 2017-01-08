@@ -23,7 +23,7 @@ class UserRepositoryDao extends PersistentRepositoryDao<User> implements UserRep
     private static final Logger log = Logger.getLogger(UserRepositoryDao.class.name)
 
     private static final String USER_REQUEST = """select user.id, user.first_name, user.last_name, user.password, user.email,
-    user.account_non_expired, user.account_non_locked, user.credentials_non_expired, user.enabled,
+    user.account_non_expired, user.account_non_locked, user.credentials_non_expired, user.version, user.enabled,
     group_concat(concat('ROLE_', upper(role.role_name))) roles
     from users user
     left join user_roles userrole on (userrole.user_id = user.id)
@@ -110,7 +110,7 @@ VALUES (:first_name, :last_name, :email, :password, :account_non_expired, :accou
 
     @Override
     Collection<Role> getUserRoles(long userId) {
-        return jdbcTemplate.query('''select r.id, concat('ROLE_', UPPER(r.role_name)) role_name from roles r
+        return jdbcTemplate.query('''select r.id, r.version, concat('ROLE_', UPPER(r.role_name)) role_name from roles r
 inner join user_roles ur on (r.id = ur.role_id)
 inner join users u on (u.id = ur.user_id)
 where u.id = :id and u.enabled = :enabled''', [id: userId, enabled: true], mapperHolder.getOrCreateMapper(Role))

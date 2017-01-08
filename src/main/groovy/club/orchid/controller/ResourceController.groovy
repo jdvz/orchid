@@ -55,14 +55,14 @@ class ResourceController extends AbstractController {
                                @RequestParam("upload") final MultipartFile file,
                                final Model model,
                                final RedirectAttributes redirectAttributes) {
-        String message = ''
+        String message
         Image image = null
         if (!file.isEmpty()) {
             final String contentType = file.contentType
             if (contentType in allowedMimeTypes.split(/\s?,\s?/)) {
                 name = name ?: FrontendUtils.createFileName(file.originalFilename)
                 prettyUrl = prettyUrl ?: name
-                image = resourceService.getOrCreateImage(name, prettyUrl)
+                image = resourceService.getOrCreateImage(name, prettyUrl, contentType)
                 try {
                     resourceService.save(image, file)
                     message = "You successfully uploaded $name"
@@ -98,7 +98,7 @@ class ResourceController extends AbstractController {
             final String contentType = file.contentType
             final String fileName = FrontendUtils.createFileName(file.originalFilename)
             if (contentType in allowedMimeTypes.split(/\s?,\s?/)) {
-                Image image = resourceService.createImage(fileName)
+                Image image = resourceService.createImage(fileName, contentType)
                 try {
                     resourceService.save(image, file)
                 }
@@ -128,5 +128,14 @@ class ResourceController extends AbstractController {
             return new HttpEntity<>(image.bytes, headers)
         }
         return HttpEntity.EMPTY
+    }
+
+
+    @RequestMapping(value = '/browse.html', method = RequestMethod.GET)
+    public String images(@RequestParam(value = "CKEditor", required = false) String ckEditor, final Model model, final RedirectAttributes redirectAttributes) {
+        Collection<String> images = resourceService.getImageNames("")
+        model.addAttribute('links', images)
+        model.addAttribute('message', 'list')
+        return "images/browse"
     }
 }

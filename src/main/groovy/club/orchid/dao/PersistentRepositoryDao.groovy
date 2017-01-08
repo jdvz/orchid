@@ -47,6 +47,11 @@ abstract class PersistentRepositoryDao <T extends AbstractMappedPersistent<T>> i
         }
     }
 
+    @Override
+    int getNextVal(final String sequenceName) {
+        return jdbcTemplate.queryForObject("select nextval('$sequenceName')", [:], Integer.class)
+    }
+
     protected long create(final T obj) {
         final KeyHolder keyHolder = new GeneratedKeyHolder()
 

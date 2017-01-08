@@ -16,7 +16,7 @@ import org.springframework.stereotype.Repository
 @Repository('resourceDao')
 class ResourceRepositoryDao extends PersistentRepositoryDao<Image> implements ResourceDao {
     @Override
-    Optional<Image> getImageByNameAndPrettyUrl(String name, String prettyUrl) {
+    Optional<Image> getImageByNameAndPrettyUrl(String name, String prettyUrl, String contentType) {
         try {
             return Optional.of(jdbcTemplate.queryForObject(
     '''SELECT
@@ -25,12 +25,16 @@ class ResourceRepositoryDao extends PersistentRepositoryDao<Image> implements Re
     entry.pretty_url,
     entry.discriminator,
     entry.enabled,
+    entry.version,
     image.real_name,
+    image.real_dir,
     image.mime
     FROM cms_entries entry
     INNER JOIN images image ON (entry.id = image.id)
     WHERE entry.enabled = :enabled AND (:pretty_url IS NOT NULL OR entry.name = :name)
-    AND (:pretty_url IS NULL OR entry.pretty_url = :pretty_url)''', [enabled: true, name: name, pretty_url: prettyUrl], mapperHolder.getOrCreateMapper(Image.class)))
+    AND (:pretty_url IS NULL OR entry.pretty_url = :pretty_url) AND image.mime = :contentType''',
+                    [enabled: true, name: name, pretty_url: prettyUrl, contentType: contentType],
+                    mapperHolder.getOrCreateMapper(Image.class)))
         } catch (EmptyResultDataAccessException e) {
             return Optional.empty()
         }
@@ -46,7 +50,9 @@ class ResourceRepositoryDao extends PersistentRepositoryDao<Image> implements Re
     entry.pretty_url,
     entry.discriminator,
     entry.enabled,
+    entry.version,
     image.real_name,
+    image.real_dir,
     image.mime
     FROM cms_entries entry
     INNER JOIN images image ON (entry.id = image.id)
@@ -69,17 +75,27 @@ WHERE entry.id = :id''', [name: image.name, pretty_url: image.prettyUrl, enabled
             jdbcTemplate.update('''
 UPDATE images image
 SET image.real_name = :name,
+image.real_dir = :dir,
 image.mime = :mime
-WHERE image.id = :id''', [name: image.realName, mime: image.mime, id: image.id])
+WHERE image.id = :id''', [name: image.realName, dir: image.realDir, mime: image.mime, id: image.id])
         } else {
             final KeyHolder keyHolder = new GeneratedKeyHolder()
 
             jdbcTemplate.update('''INSERT INTO cms_entries(name, pretty_url, discriminator, enabled) VALUES (:name, :pretty_url, :discriminator, :enabled)''',
                     new MapSqlParameterSource([name: image.name, pretty_url: image.prettyUrl, discriminator: 'Image', enabled: true]), keyHolder)
             image.id = keyHolder.key?.longValue()
-            jdbcTemplate.update('''INSERT INTO images(id, real_name, mime) VALUES (:id, :name, :mime)''',
-                    new MapSqlParameterSource([id: image.id, name: image.realName, mime: image.mime]))
+            jdbcTemplate.update('''INSERT INTO images(id, real_name, real_dir, mime) VALUES (:id, :name, :dir, :mime)''',
+                    new MapSqlParameterSource([id: image.id, name: image.realName, dir: image.realDir, mime: image.mime]))
         }
         return image
+    }
+
+    @Override
+    Collection<String> getImageNames(String dir) {
+        return jdbcTemplate.queryForList('''select concat(coalesce(entry.pretty_url, entry.name), '.', substring_index(image.mime, '/', -1)) from images image
+join cms_entries entry on (entry.id = image.id)
+where entry.enabled = :enabled
+order by coalesce(entry.pretty_url, entry.name) 
+limit :limit offset :offset''', [limit: 20, offset: 0, enabled: true], String.class)
     }
 }

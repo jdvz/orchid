@@ -6,6 +6,7 @@ import club.orchid.domain.cms.Page
 import jdk.internal.util.xml.impl.Pair
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.util.CollectionUtils
@@ -20,9 +21,11 @@ import static org.junit.Assert.*
  * @date: 3/2/16 10:51 AM
  */
 public class QueryUtilsTest {
+    @Value('${path.images:resources/images}')
+    String pathImages
+
     @Autowired
     PasswordEncoder passwortEncoder
-
 
     public static final String VASIA = 'Vasia'
 
@@ -65,5 +68,10 @@ public class QueryUtilsTest {
     public void testStreamMapp() throws Exception {
         List<Map.Entry<String, String>> pairs = [new MapEntry('test-1', 'test-1-1'), new MapEntry('test-1', 'test-1-2'), new MapEntry('test-2', 'test-2-2')]
 //        pairs.stream().
+    }
+
+    @Test
+    void testFileAttributes() throws Exception {
+        println "$pathImages/image.realDir/image.realName"
     }
 }

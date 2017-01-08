@@ -32,6 +32,7 @@ entry.id,
 entry.name,
 entry.pretty_url,
 entry.discriminator,
+entry.version,
 entry.enabled
 FROM cms_entries entry
 INNER JOIN pages page ON (entry.id = page.id)
@@ -47,6 +48,7 @@ entry.id,
 entry.name,
 entry.pretty_url,
 entry.discriminator,
+entry.version,
 entry.enabled,
 coalesce(page.main_page_id, 0) main_page_id
 FROM cms_entries entry
@@ -66,6 +68,7 @@ WHERE entry.enabled = :enabled AND page.main_page_id = :main_page_id""", [enable
     entry.pretty_url,
     entry.discriminator,
     coalesce(page.main_page_id, 0) main_page_id,
+    entry.version,
     entry.enabled
     FROM cms_entries entry
     INNER JOIN pages page ON (entry.id = page.id)
@@ -88,6 +91,7 @@ WHERE entry.enabled = :enabled AND page.main_page_id = :main_page_id""", [enable
     entry.pretty_url,
     entry.discriminator,
     coalesce(page.main_page_id, 0) main_page_id,
+    entry.version,
     entry.enabled
     FROM cms_entries entry
     INNER JOIN pages page ON (entry.id = page.id)
@@ -115,7 +119,8 @@ WHERE entry.enabled = :enabled AND page.main_page_id = :main_page_id""", [enable
     CmsPage create(final PageCommand pageCommand) {
         final KeyHolder keyHolder = new GeneratedKeyHolder()
 
-        jdbcTemplate.update('''INSERT INTO cms_entries(name, pretty_url, discriminator, enabled) VALUES (:name, :pretty_url, :discriminator, :enabled)''',
+        jdbcTemplate.update('''INSERT INTO cms_entries(name, pretty_url, discriminator, version, enabled) 
+VALUES (:name, :pretty_url, :discriminator, 1, :enabled)''',
                 new MapSqlParameterSource([name: pageCommand.name, pretty_url: pageCommand.prettyUrl, discriminator: 'CmsPage', enabled: true]), keyHolder)
         long id = keyHolder.key?.longValue()
         jdbcTemplate.update('''INSERT INTO pages(id, main_page_id, template) VALUES (:id, :main_page_id, :template)''',

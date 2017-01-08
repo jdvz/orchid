@@ -42,6 +42,7 @@ class ProductMapper<T extends Product<T>> implements RowMapper<T> {
         product.setShootCount(rs.getInt('shoot_count'))
         product.setBlossomStatus(BlossomStatus.valueOf(rs.getString('blossom_status')))
         product.setLeaf(rs.getBoolean('leaf'))
+        product.setVersion(rs.getInt('version'))
         return product
     }
 }

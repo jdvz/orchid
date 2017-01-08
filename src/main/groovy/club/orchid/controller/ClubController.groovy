@@ -80,4 +80,7 @@ class ClubController {
         model.addAttribute('message', e.message)
         return '404'
     }
+
+
+
 }

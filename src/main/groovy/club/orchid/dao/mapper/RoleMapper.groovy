@@ -19,6 +19,7 @@ class RoleMapper implements RowMapper<Role> {
         Role role = new Role()
         role.setId(rs.getInt('id'))
         role.setRoleName(rs.getString('role_name'))
+        role.setVersion(rs.getInt('version'))
         return role
     }
 

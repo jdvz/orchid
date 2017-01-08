@@ -27,6 +27,7 @@ class UserMapper implements RowMapper<User> {
         user.setCredentialsNonExpired(rs.getBoolean('credentials_non_expired'))
         user.setEnabled(rs.getBoolean('enabled'))
         user.setRoles(rs.getString('roles'))
+        user.setVersion(rs.getInt('version'))
         return user
     }
 

@@ -10,4 +10,5 @@ import club.orchid.domain.AbstractMappedPersistent
 interface PersistentRepository<T extends AbstractMappedPersistent<T>> {
     public Optional<T> get(final long id, Class<T> clazz)
     public Optional<T> get(final Map<String, Object> params, Class<T> clazz)
+    public int getNextVal(final String sequenceName)
 }

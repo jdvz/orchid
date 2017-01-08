@@ -23,7 +23,9 @@ class ImageMapper implements RowMapper<Image> {
         image.setDiscriminator('Image')
         image.setEnabled(true)
         image.setRealName(rs.getString('real_name'))
+        image.setRealDir(rs.getString('real_dir'))
         image.setMime(rs.getString('mime'))
+        image.setVersion(rs.getInt('version'))
         image
     }
 }

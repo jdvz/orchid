@@ -34,6 +34,7 @@ class PageMapper<T extends Page> extends RowPageMapper<T> {
             page.setMainPage(new CmsPage(id: mainPageId, lazy: true))
         }
         page.setDiscriminator(discriminator)
+        page.setVersion(rs.getInt('version'))
 
         pageContentStrategy.extractContent(rs, rowNum, page)
 

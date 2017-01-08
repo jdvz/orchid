@@ -26,6 +26,7 @@ class RowPageMapper <T extends Page> implements RowMapper<T> {
         final String discriminator = rs.getString('discriminator')
         T page = getStrategy(discriminator).createPage()
         page.setDiscriminator(discriminator)
+        page.setVersion(rs.getInt('version'))
         fillPage(rs, rowNum, page)
         return page
     }
