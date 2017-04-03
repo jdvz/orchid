@@ -1,7 +1,6 @@
 package club.orchid.config
 
-//import org.apache.solr.client.solrj.SolrServer
-//import org.apache.solr.client.solrj.impl.HttpSolrServer
+import org.apache.log4j.Logger
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.AutoConfigureAfter
 import org.springframework.context.annotation.Bean
@@ -11,9 +10,7 @@ import org.springframework.context.annotation.PropertySource
 import org.springframework.core.env.Environment
 import org.springframework.data.solr.core.SolrTemplate
 import org.springframework.data.solr.repository.config.EnableSolrRepositories
-import org.springframework.data.solr.server.support.EmbeddedSolrServerFactoryBean
 import org.springframework.data.solr.server.support.HttpSolrClientFactoryBean
-
 /**
  *
  * @author Dmitri Zaporozhtsev <dmitri.zaporozhtsev@novardis.com>
@@ -21,11 +18,12 @@ import org.springframework.data.solr.server.support.HttpSolrClientFactoryBean
  * @copyright 2016 NOVARDIS
  */
 @Configuration
-@EnableSolrRepositories(basePackages=['club.orchid.dao.product'], multicoreSupport=true)
-@Profile("standalone")
+@EnableSolrRepositories(basePackages = ['club.orchid.dao.product'], multicoreSupport = true)
+//@Profile("standalone")
 @PropertySource("classpath:application.properties")
 @AutoConfigureAfter(WebSecurityConfigurer.class)
 class StandaloneSolrConfigurer {
+    private static final Logger log = Logger.getLogger(StandaloneSolrConfigurer.class.getName())
     static final String SOLR_HOST = 'solr.host';
 
     @Autowired
@@ -33,6 +31,7 @@ class StandaloneSolrConfigurer {
 
     @Bean
     public HttpSolrClientFactoryBean solrServerFactoryBean() {
+        log.info("init solr factory for path ${SOLR_HOST}")
         HttpSolrClientFactoryBean factory = new HttpSolrClientFactoryBean();
 
         factory.setUrl(environment.getRequiredProperty(SOLR_HOST));

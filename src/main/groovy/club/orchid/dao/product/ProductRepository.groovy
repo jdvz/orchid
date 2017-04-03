@@ -1,6 +1,7 @@
 package club.orchid.dao.product
 
 import club.orchid.domain.product.Hybrid
+import club.orchid.domain.product.IProduct
 import club.orchid.domain.product.Orchid
 import club.orchid.domain.product.Product
 
@@ -11,8 +12,13 @@ import club.orchid.domain.product.Product
  * @copyright 2016 NOVARDIS
  */
 interface ProductRepository {
-    List<Product> products()
+    List<IProduct> products()
 
-    Orchid create(Orchid product)
-    Hybrid create(Hybrid product)
+    IProduct update(IProduct product)
+
+//    Orchid create(Orchid product)
+//    Hybrid create(Hybrid product)
+
+    IProduct get(HashMap<String, Object> map)
+    IProduct get(IProduct example)
 }

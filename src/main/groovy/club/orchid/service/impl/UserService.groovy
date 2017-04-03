@@ -1,8 +1,9 @@
-package club.orchid.service
+package club.orchid.service.impl
 
 import club.orchid.dao.user.UserRepository
 import club.orchid.domain.auth.Role
 import club.orchid.domain.auth.User
+import club.orchid.service.IUserService
 import club.orchid.util.AuthenticationUtils
 import club.orchid.web.forms.UserObject
 import org.apache.log4j.Logger
@@ -23,6 +24,7 @@ import org.springframework.util.StringUtils
  * @date: 2/14/16 4:34 PM
  */
 @Service('userService')
+@Qualifier('userService')
 class UserService implements IUserService {
     private static final Logger log = Logger.getLogger(UserService.class.name)
 

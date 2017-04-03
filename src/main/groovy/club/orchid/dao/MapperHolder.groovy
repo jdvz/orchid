@@ -1,8 +1,7 @@
 package club.orchid.dao
 
 import club.orchid.domain.AbstractMappedPersistent
-import club.orchid.domain.cms.Page
-import club.orchid.service.MainApplicationContext
+import club.orchid.service.impl.MainApplicationContext
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.jdbc.core.RowMapper
 import org.springframework.stereotype.Component

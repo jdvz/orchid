@@ -1,8 +1,10 @@
-package club.orchid.service
+package club.orchid.service.impl
 
 import club.orchid.Constants
 import club.orchid.dao.resource.ResourceDao
 import club.orchid.domain.cms.Image
+import club.orchid.service.IConfigService
+import club.orchid.service.IResourceService
 import club.orchid.util.MimeUtils
 import club.orchid.web.forms.PageCommand
 import org.apache.log4j.Logger
@@ -13,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional
 import org.springframework.util.FileCopyUtils
 import org.springframework.web.multipart.MultipartFile
 
-import javax.activation.MimetypesFileTypeMap
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths

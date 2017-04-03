@@ -172,6 +172,10 @@ task clientBoot(type: BootRepackage, dependsOn: clientJar) {
     customConfiguration = 'custom'
 }
 
-//task debug(type: BootRepackage, dependsOn:) {
-//    applicationDefaultJvmArgs = ['-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=5005']
-//}
+/*
+// ./gradlew -Dorg.gradle.debug=true bootRun
+task debug(type: BootRepackage) {
+    applicationDefaultJvmArgs = ['-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=5005']
+}
+*/
+

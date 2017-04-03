@@ -3,7 +3,7 @@ package club.orchid.controller
 import club.orchid.domain.cms.CmsPage
 import club.orchid.domain.cms.Page
 import club.orchid.service.IPageService
-import club.orchid.service.MainApplicationContext
+import club.orchid.service.impl.MainApplicationContext
 import club.orchid.util.AuthenticationUtils
 import club.orchid.web.forms.PageCommand
 import org.springframework.beans.factory.annotation.Autowired
@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.servlet.mvc.support.RedirectAttributes
 
 import javax.validation.Valid
-import java.security.Principal
 
 /**
  * Created with IntelliJ IDEA.

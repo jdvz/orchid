@@ -118,7 +118,7 @@ class ResourceController extends AbstractController {
 
     @RequestMapping(value = '/{uid}.{mime}', method = RequestMethod.GET)
     @ResponseBody
-    public HttpEntity<byte[]> get(@PathVariable final String uid, @PathVariable final String mime, final RedirectAttributes redirectAttributes) {
+    public HttpEntity<Object> get(@PathVariable final String uid, @PathVariable final String mime, final RedirectAttributes redirectAttributes) {
         Image image = resourceService.getImageFullContentByUid(uid)
         if (image != null) {
             HttpHeaders headers = new HttpHeaders()

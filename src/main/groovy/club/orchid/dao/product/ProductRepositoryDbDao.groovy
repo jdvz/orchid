@@ -5,6 +5,7 @@ import club.orchid.dao.mapper.PageMapper
 import club.orchid.dao.mapper.ProductMapper
 import club.orchid.dao.mapper.RowPageMapper
 import club.orchid.domain.product.Hybrid
+import club.orchid.domain.product.IProduct
 import club.orchid.domain.product.Orchid
 import club.orchid.domain.product.Product
 import org.springframework.beans.factory.annotation.Autowired
@@ -18,15 +19,9 @@ import org.springframework.stereotype.Repository
  * @link http://www.novardis.com/
  * @copyright 2016 NOVARDIS
  */
-@Repository('productRepository')
-class ProductRepositoryDao extends PersistentRepositoryDao<Product> implements ProductRepository {
-    @Autowired
-    private PageMapper pageMapper
-    @Autowired
-    private ProductMapper productMapper
-
-    public List<Product> products() {
-        return jdbcTemplate.query('''
+@Repository('productDbRepository')
+class ProductRepositoryDbDao extends PersistentRepositoryDao<Product> implements ProductRepository {
+    public static final String SQ_PRODUCT = '''
 SELECT
     product.id id,
     product.name name,
@@ -42,12 +37,26 @@ LEFT JOIN orchids orchid ON (orchid.id = product.id)
 LEFT JOIN hybrids hybrid ON (hybrid.id = product.id)
 LEFT JOIN categories category ON (category.id = orchid.category_id)
 WHERE product.enabled = :enabled
-''', [enabled: true],
-                productMapper)
+'''
+    @Autowired
+    private PageMapper pageMapper
+    @Autowired
+    private ProductMapper productMapper
+
+    public List<Product> products() {
+        return jdbcTemplate.query(SQ_PRODUCT, [enabled: true], productMapper)
     }
 
     @Override
-    public Orchid create(Orchid product) {
+    public IProduct update(IProduct product) {
+        if (product.id) {
+//            return Orchid.isCase(product) ? createOrchid(product) : createHybrid(product)
+        } else {
+            return Orchid.isCase(product) ? createOrchid(product) : createHybrid(product)
+        }
+    }
+
+    private Orchid createOrchid(Orchid product) {
         final KeyHolder keyHolder = new GeneratedKeyHolder()
         jdbcTemplate.update('''
 INSERT INTO products(name, description, shoot_count, blossom_status, leaf)
@@ -60,8 +69,7 @@ INSERT INTO orchids(id, category_id) VALUES(:id, :category_id),
         return product
     }
 
-    @Override
-    public Hybrid create(Hybrid product) {
+    private Hybrid createHybrid(Hybrid product) {
         final KeyHolder keyHolder = new GeneratedKeyHolder()
         jdbcTemplate.update('''
 INSERT INTO products(name, description, shoot_count, blossom_status, leaf)
@@ -72,5 +80,16 @@ VALUES (:name, :description, :shoot_count, :blossom_status, :leaf''',
 INSERT INTO hybrids(id) VALUES(:id),
 ''', [id: id])
         return product
+    }
+
+    @Override
+    IProduct get(HashMap<String, Object> map) {
+        map.enabled = true
+        return jdbcTemplate.<Product> queryForObject(SQ_PRODUCT, map, productMapper)
+    }
+
+    @Override
+    IProduct get(IProduct example) {
+        return null
     }
 }

@@ -11,7 +11,7 @@ import groovy.transform.Canonical
  * @copyright 2016 NOVARDIS
  */
 @Canonical
-abstract class Product<T extends Product> extends Named<T> {
+abstract class Product<T extends Product> extends Named<T> implements IProduct {
     @Primitive
     String description
     @Primitive

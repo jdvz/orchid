@@ -1,6 +1,5 @@
 package club.orchid.domain.product
 
-import club.orchid.anno.mapping.Persistent
 import club.orchid.anno.mapping.Primitive
 import club.orchid.domain.AbstractMappedPersistent
 import groovy.transform.Canonical

@@ -1,4 +1,4 @@
-package club.orchid.service
+package club.orchid.service.impl
 
 import club.orchid.anno.strategy.PageStrategy
 import club.orchid.domain.cms.Page

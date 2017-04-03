@@ -1,8 +1,7 @@
 package club.orchid.dao.mapper
 
-import club.orchid.domain.cms.CmsPage
 import club.orchid.domain.cms.Page
-import club.orchid.service.MainApplicationContext
+import club.orchid.service.impl.MainApplicationContext
 import club.orchid.strategy.PageContentStrategy
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.jdbc.core.RowMapper
