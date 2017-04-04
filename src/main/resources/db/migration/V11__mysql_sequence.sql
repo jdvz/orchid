@@ -10,7 +10,7 @@ CREATE TABLE sequence_data (
 
 -- This code will create sequence with default values.
 INSERT INTO sequence_data (sequence_name) VALUE ('directory_sequence');
-INSERT INTO sequence_data (sequence_name, sequence_max_value, orchid.sequence_data.sequence_cycle) VALUE ('files_sequence', 128, TRUE);
+INSERT INTO sequence_data (sequence_name, sequence_max_value, sequence_data.sequence_cycle) VALUE ('files_sequence', 128, TRUE);
 
 DELIMITER $$
 

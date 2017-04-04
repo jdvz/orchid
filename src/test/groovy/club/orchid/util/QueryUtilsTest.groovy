@@ -50,7 +50,7 @@ public class QueryUtilsTest {
 
     @Test
     public void createPassword() throws Exception {
-        def encoder = new BCryptPasswordEncoder()
+        def encoder = new BCryptPasswordEncoder(-1)
         def pwd = encoder.encode('123')
         println "encoded password $pwd"
         assertTrue('Test password', encoder.matches('123', pwd))

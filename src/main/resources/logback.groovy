@@ -33,7 +33,6 @@
 
     def setupAppenders() {
         def logpath = System.getProperty('logging.path', 'log')
-        def logfileDate = timestamp('yyyy-MM-dd')
         def filePatternFormat = "%d{HH:mm:ss.SSS} %-5level %logger - %msg%n"
 
         addInfo "$logpath - ${System.getProperty('logging.path')}"
@@ -58,7 +57,7 @@
         appender("APP_FILE_LOGGER", RollingFileAppender) {
             prudent = true
             append = true
-            file = "${logpath}/fluser.log"
+            file = "${logpath}/user.log"
             rollingPolicy(TimeBasedRollingPolicy) {
                 fileNamePattern = "${logpath}/user.%d{yyyy-MM-dd}.log"
             }

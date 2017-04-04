@@ -3,6 +3,11 @@ package club.orchid.config
 import club.orchid.service.IUserService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.AutoConfigureAfter
+import org.springframework.boot.autoconfigure.condition.ConditionEvaluationReport
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
+import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication
 import org.springframework.boot.autoconfigure.security.SecurityProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -11,6 +16,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
 import org.springframework.security.core.session.SessionRegistry
 import org.springframework.security.core.session.SessionRegistryImpl
@@ -26,76 +32,85 @@ import org.springframework.security.web.access.AccessDeniedHandler
  */
 @Configuration
 @EnableWebSecurity
-@Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)
-@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
-@AutoConfigureAfter(JdbcConfigurer.class)
-class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
-    @Autowired
-    IUserService userService
-    @Autowired
-    SessionRegistry sessionRegistry
+//@Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)
+//@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
+//@AutoConfigureAfter(JdbcConfigurer.class)
+@ConditionalOnClass([ EnableWebSecurity.class ])
+@ConditionalOnMissingBean(WebSecurityConfiguration.class)
+@ConditionalOnWebApplication
+class WebSecurityConfigurer {
+    @Configuration
+    @ConditionalOnProperty(prefix = "", name = "", matchIfMissing = true)
+    @Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)
+    @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
+    protected static class ApplicationWebSecurityConfiguration extends WebSecurityConfigurerAdapter {
+        @Autowired
+        IUserService userService
+        @Autowired
+        SessionRegistry sessionRegistry
+        @Autowired(required = false)
+        AuthenticationEntryPoint authenticationEntryPoint
+        @Autowired(required = false)
+        AccessDeniedHandler accessDeniedHandler
 //    @Autowired
-    PasswordEncoder passwordEncoder
-    @Autowired(required = false)
-    AuthenticationEntryPoint authenticationEntryPoint
-    @Autowired(required = false)
-    AccessDeniedHandler accessDeniedHandler
+        PasswordEncoder passwordEncoder
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http
-            .authorizeRequests()
-                .antMatchers('/resources/**').permitAll()
+        @Override
+        protected void configure(HttpSecurity http) throws Exception {
+            http
+                    .authorizeRequests()
+                    .antMatchers('/resources/**').permitAll()
 //                .anyRequest().anonymous()
-                .antMatchers('/admin/**').hasRole('ADMIN')
-                .antMatchers('/club/**').hasAnyRole('ADMIN', 'CUSTOMER', 'MANAGER')
-                .and()
-            .sessionManagement()
-                .maximumSessions(1)
-                .maxSessionsPreventsLogin(false)
-                .expiredUrl('/login?expired')
-                .sessionRegistry(sessionRegistry)
-                .and().and()
+                    .antMatchers('/admin/**').hasRole('ADMIN')
+                    .antMatchers('/club/**').hasAnyRole('ADMIN', 'CUSTOMER', 'MANAGER')
+                    .and()
+                    .sessionManagement()
+                    .maximumSessions(1)
+                    .maxSessionsPreventsLogin(false)
+                    .expiredUrl('/login?expired')
+                    .sessionRegistry(sessionRegistry)
+                    .and().and()
 //            .exceptionHandling()
 //                .authenticationEntryPoint(authenticationEntryPoint)
 //                .accessDeniedHandler(accessDeniedHandler)
 //                .and()
-            .formLogin()
-                .loginPage('/login')
-                .failureUrl('/login?error')
-                .usernameParameter('email')
-                .permitAll()
-                .and()
-            .logout()
-                .permitAll()
-                .deleteCookies('remember-me')
-                .logoutSuccessUrl('/')
-                .and()
-            .headers()
-                .frameOptions().disable()
-                .and()
+                    .formLogin()
+                    .loginPage('/login')
+                    .failureUrl('/login?error')
+                    .usernameParameter('email')
+                    .permitAll()
+                    .and()
+                    .logout()
+                    .permitAll()
+                    .deleteCookies('remember-me')
+                    .logoutSuccessUrl('/')
+                    .and()
+                    .headers()
+                    .frameOptions().disable()
+                    .and()
 //                .csrf().disable()
-            .rememberMe()
-    }
-
-    @Bean(name = 'passwordEncoder')
-    public PasswordEncoder passwordEncoder() {
-        if (!passwordEncoder) {
-            passwordEncoder = new BCryptPasswordEncoder()
+                    .rememberMe()
         }
-        return passwordEncoder
-    }
 
-    @Bean(name = 'sessionRegistry')
-    public SessionRegistry sessionRegistry() {
-        return new SessionRegistryImpl();
-    }
+        @Bean(name = 'passwordEncoder')
+        public PasswordEncoder passwordEncoder() {
+            if (!passwordEncoder) {
+                passwordEncoder = new BCryptPasswordEncoder()
+            }
+            return passwordEncoder
+        }
 
-    @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth
+        @Bean(name = 'sessionRegistry')
+        public SessionRegistry sessionRegistry() {
+            return new SessionRegistryImpl();
+        }
+
+        @Autowired
+        public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+            auth
 //                .getDefaultUserDetailsService()
-                .userDetailsService(userService)
-                .passwordEncoder(passwordEncoder())
+                    .userDetailsService(userService)
+                    .passwordEncoder(passwordEncoder())
+        }
     }
 }

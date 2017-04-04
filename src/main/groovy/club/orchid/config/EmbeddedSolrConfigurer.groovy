@@ -1,6 +1,8 @@
 package club.orchid.config
 
+import org.apache.log4j.Logger
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.autoconfigure.AutoConfigureAfter
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -20,19 +22,20 @@ import org.springframework.data.solr.server.support.EmbeddedSolrServerFactoryBea
 @Configuration
 @EnableSolrRepositories(basePackages=['club.orchid.dao.product'], multicoreSupport=true)
 @Profile("embedded")
-@PropertySource("classpath:application.properties")
+@PropertySource(value = "classpath:application.properties", ignoreResourceNotFound = true)
 @AutoConfigureAfter(WebSecurityConfigurer.class)
 class EmbeddedSolrConfigurer {
-    public static final String SOLR_HOME = 'solr.home'
+    private static final Logger log = Logger.getLogger(EmbeddedSolrConfigurer.class.getName())
 
-    @Autowired
-    private Environment environment;
+    @Value('${solr.home}')
+    private String solrHome;
 
     @Bean
     public EmbeddedSolrServerFactoryBean solrServerFactoryBean() {
+        log.info("init solr factory for path ${solrHome}")
         EmbeddedSolrServerFactoryBean factory = new EmbeddedSolrServerFactoryBean();
 
-        factory.setSolrHome(environment.getRequiredProperty(SOLR_HOME));
+        factory.setSolrHome(solrHome);
 
         return factory;
     }
