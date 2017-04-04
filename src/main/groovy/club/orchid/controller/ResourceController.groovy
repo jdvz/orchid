@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.ResponseBody
+import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.multipart.MultipartFile
 import org.springframework.web.servlet.mvc.support.RedirectAttributes
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder
@@ -48,6 +49,7 @@ class ResourceController extends AbstractController {
     }
 
     @Secured('ROLE_ADMIN')
+    @ResponseBody
     @RequestMapping(value = '/upload.html', method = RequestMethod.POST)
     public String handleUpload(@RequestParam(required = false) String name,
                                @RequestParam(required = false) String prettyUrl,
@@ -65,6 +67,7 @@ class ResourceController extends AbstractController {
                 image = resourceService.getOrCreateImage(name, prettyUrl, contentType)
                 try {
                     resourceService.save(image, file)
+
                     message = "You successfully uploaded $name"
                 }
                 catch (Exception e) {
@@ -78,9 +81,16 @@ class ResourceController extends AbstractController {
             message = "You failed to upload $name because the file was empty"
         }
         if (ckEditor) {
+/*
             model.addAttribute('errorMessage', message)
             model.addAttribute('uploadImage', FrontendUtils.createImageUrl(image))
             return 'system/responseUploadImage'
+*/
+            return [
+                    'uploaded': 1,
+                    'fileName': image.realName,
+                    'url': "${image.realDir}"
+            ]
         } else {
             if (message) {
                 redirectAttributes.addFlashAttribute('message', message)
