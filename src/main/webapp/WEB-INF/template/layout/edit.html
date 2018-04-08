@@ -4,7 +4,6 @@
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
-    <title><th:block th:text="#{edit.page.title}" />[[${page.name}]]</title>
     <meta name="_csrf_token" th:content="${_csrf.token}" content="csft.token" />
     <meta name="_csrf_header" th:content="${_csrf.headerName}" content="csrf.headerName"/>
     <meta name="_csrf_param" th:content="${_csrf.parameterName}" content="csrf.paramName"/>

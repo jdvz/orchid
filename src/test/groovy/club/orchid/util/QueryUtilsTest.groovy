@@ -33,8 +33,8 @@ public class QueryUtilsTest {
     public void createInsertString() throws Exception {
         def query = QueryUtils.createInsertString(User.class)
         println "'$query'"
-        assertTrue("Initial query insert", ("insert into users(first_name,last_name,password,email,account_non_expired,account_non_locked,credentials_non_expired,enabled,id)\n" +
-                "    values (:first_name,:last_name,:password,:email,:account_non_expired,:account_non_locked,:credentials_non_expired,:enabled,:id)").equals(query))
+        assertTrue("Initial query insert", ("insert into users(first_name,last_name,password,email,account_non_expired,account_non_locked,credentials_non_expired,enabled,id,version)\n" +
+                "    values (:first_name,:last_name,:password,:email,:account_non_expired,:account_non_locked,:credentials_non_expired,:enabled,:id,:version)").equals(query))
     }
 
     @Test

@@ -21,7 +21,7 @@ import org.springframework.data.solr.server.support.HttpSolrClientFactoryBean
  * @copyright 2016 NOVARDIS
  */
 @Configuration
-@EnableSolrRepositories(basePackages=['club.orchid.dao.product'], multicoreSupport=true)
+@EnableSolrRepositories(basePackages=['club.orchid.dao.product'])
 @Profile("standalone")
 @PropertySource("classpath:application.properties")
 @AutoConfigureAfter(WebSecurityConfigurer.class)

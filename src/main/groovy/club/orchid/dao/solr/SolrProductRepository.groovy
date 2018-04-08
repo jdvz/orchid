@@ -18,12 +18,12 @@ import org.springframework.data.solr.repository.SolrCrudRepository
  * @copyright 2016 NOVARDIS
  */
 interface SolrProductRepository extends SolrCrudRepository<Product, String> {
-    Page<Product> findByPopularity(Integer popularity, Pageable page)
+//    Page<Product> findByPopularity(Integer popularity, Pageable page)
 
     Page<Product> findByNameOrDescription(@Boost(2f) String name, String description, Pageable page)
 
     @Highlight
-    HighlightPage<Product> findByNameIn(Collection<String> name, Page page)
+    HighlightPage<Product> findByNameIn(Collection<String> name, Pageable page)
 
     @Query(value = "name:?0")
     @Facet(fields = [ "cat" ], limit=20)

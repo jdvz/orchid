@@ -4,6 +4,7 @@ import club.orchid.domain.cms.Image
 import club.orchid.service.IPageService
 import club.orchid.service.IUserService
 import club.orchid.service.UserService
+import groovy.util.logging.Log
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
@@ -25,12 +26,14 @@ import java.security.Principal
  */
 @Controller
 @RequestMapping('/')
+@Log
 class MainController extends AbstractController {
     @Autowired
     private IPageService pageService
 
     @RequestMapping(value = ['/','/index.html'], method = RequestMethod.GET)
     public String main(final Model model) {
+        log.info('passed')
         model.addAttribute('title', 'start')
         model.addAttribute('pages', pageService.pages())
         return 'index'
