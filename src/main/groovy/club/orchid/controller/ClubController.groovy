@@ -24,7 +24,7 @@ import java.security.Principal
 @Controller
 @RequestMapping('/club')
 @Secured(['ROLE_USER', 'ROLE_ADMIN'])
-class ClubController {
+class  ClubController {
     @Autowired
     IUserService userService
 
